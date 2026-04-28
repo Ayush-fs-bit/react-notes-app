@@ -42,7 +42,7 @@ function App() {
     setIsAdding(false);
   }
 
-  function handleclick() {
+  function handleAddClick() {
     setIsAdding(true);
     setSelectedNote(null);
   }
@@ -58,6 +58,14 @@ function App() {
     setIsAdding(false);
   }
 
+  function handleDeletingNote(){
+    if(!selectedNote)return;
+    if(!window.confirm("Delete this note"))return;
+    const remainingNotes=notes.filter((n)=>n.id !== selectedNote.id);
+    setNotes(remainingNotes);
+    setSelectedNote(null);
+  }
+
   return (<Router>
     <div className="App">
       <Sidebar />
@@ -65,7 +73,7 @@ function App() {
         <div className="main-header">
           <p>My Notes</p>
           <input type="text" placeholder="search notes..." onChange={handleChangeSearch} value={searchQuery} />
-          <button onClick={handleclick}>+ Add New Note</button>
+          <button onClick={handleAddClick}>+ Add New Note</button>
         </div>
         <Routes>
           <Route path="/" element={<Homepage notes={filteredNotes} onSelectNote={handleSelectNote} />} />
@@ -75,7 +83,7 @@ function App() {
       <div className='right'>
         {isAdding && <Noteform onAddNote={handleAddingNote} />}
         {!selectedNote && !isAdding && <p>select a note</p>}
-        {selectedNote && <Preview noteSelected={selectedNote} />}
+        {selectedNote && <Preview noteSelected={selectedNote} onDelete={handleDeletingNote}/>}
       </div>
     </div>
 
