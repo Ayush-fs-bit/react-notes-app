@@ -16,12 +16,14 @@ function App() {
     {
       'id': 1,
       'title': 'ayush',
-      'content': 'xyz'
+      'content': 'xyz',
+      'category':'work'
     },
     {
       'id': 2,
       'title': 'secound',
-      'content': 'xyz'
+      'content': 'xyz',
+      'category':'work'
     }
   ];
   const [notes, setNotes] = useState(data)
@@ -50,6 +52,11 @@ function App() {
     setSearchQuery(value);
   }
 
+  function handleAddingNote(newNote){
+    setNotes((prev)=>[newNote,...prev]);
+    setSelectedNote(newNote);
+    setIsAdding(false);
+  }
 
   return (<Router>
     <div className="App">
@@ -66,7 +73,7 @@ function App() {
         </Routes>
       </div>
       <div className='right'>
-        {isAdding && <Noteform />}
+        {isAdding && <Noteform onAddNote={handleAddingNote} />}
         {!selectedNote && !isAdding && <p>select a note</p>}
         {selectedNote && <Preview noteSelected={selectedNote} />}
       </div>
