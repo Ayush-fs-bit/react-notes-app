@@ -10,6 +10,7 @@ import { useState } from 'react';
 
 
 
+
 function App() {
 
   const data = [
@@ -30,6 +31,7 @@ function App() {
   const [selectedNote, setSelectedNote] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAdding, setIsAdding] = useState(false);
+  const [isEditing, setIsEditing]=useState(false);
 
   const filteredNotes = notes.filter((n) => (
     n.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -40,10 +42,12 @@ function App() {
     let note = notes.find((n) => n.id === id);
     setSelectedNote(note);
     setIsAdding(false);
+    setIsEditing(false);
   }
 
   function handleAddClick() {
     setIsAdding(true);
+    setIsEditing(false);
     setSelectedNote(null);
   }
 
@@ -56,6 +60,7 @@ function App() {
     setNotes((prev)=>[newNote,...prev]);
     setSelectedNote(newNote);
     setIsAdding(false);
+    setIsEditing(false);
   }
 
   function handleDeletingNote(){
@@ -66,6 +71,22 @@ function App() {
     setSelectedNote(null);
   }
 
+  function handleEditingNote(){
+    setIsEditing(true);
+    setIsAdding(false);
+  }
+
+  function handleUpdatedNote(updatedNote){
+    setNotes((prev)=>
+      prev.map((n)=>(n.id===updatedNote.id ? updatedNote : n))
+    )
+    setSelectedNote(updatedNote);
+    setIsEditing(false);
+  }
+
+  function handleCancelEdit(){
+    setIsEditing(false);
+  }
   return (<Router>
     <div className="App">
       <Sidebar />
@@ -82,8 +103,9 @@ function App() {
       </div>
       <div className='right'>
         {isAdding && <Noteform onAddNote={handleAddingNote} />}
+        {isEditing && <Noteform onUpdateNote={handleUpdatedNote} noteToEdit={selectedNote} onCancel={handleCancelEdit}/>}
         {!selectedNote && !isAdding && <p>select a note</p>}
-        {selectedNote && <Preview noteSelected={selectedNote} onDelete={handleDeletingNote}/>}
+        {!isEditing && selectedNote && <Preview noteSelected={selectedNote} onDelete={handleDeletingNote} onEdit={handleEditingNote}/>}
       </div>
     </div>
 
