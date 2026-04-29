@@ -19,9 +19,12 @@
   text-decoration: none;
   color: black;
 }
+.sidebar input{
+  display:block;
+}
 .logo{
   padding-top: 0;
-  padding-bottom: 60px;
+  padding-bottom: 20px;
 }
 *{
   box-sizing: border-box;

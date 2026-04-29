@@ -22,6 +22,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing]=useState(false);
+  const [activeCategory,setActiveCategory]=useState('all');
 
   useEffect(()=>{
     localStorage.setItem('notes',JSON.stringify(notes))
@@ -29,11 +30,11 @@ function App() {
 
 
 
-  const filteredNotes = notes.filter((n) => (
-    n.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    n.content.toLowerCase().includes(searchQuery.toLowerCase())
-  )
-  )
+  const filteredNotes = notes.filter((n) =>{
+    const searchFilter=n.title.toLowerCase().includes(searchQuery.toLowerCase())|| n.content.toLowerCase().includes(searchQuery.toLowerCase());
+    const categoryFilter=activeCategory==='all'||n.category===activeCategory;
+    return searchFilter && categoryFilter;
+})
   function handleSelectNote(id) {
     let note = notes.find((n) => n.id === id);
     setSelectedNote(note);
@@ -83,13 +84,19 @@ function App() {
   function handleCancelEdit(){
     setIsEditing(false);
   }
+
+  function handleCategoryChange(category){
+    setActiveCategory(category);
+   
+  }
+
+
   return (<Router>
     <div className="App">
-      <Sidebar />
+      <Sidebar onSearch={handleChangeSearch} input={searchQuery} onCategory={handleCategoryChange}/>
       <div className="main">
         <div className="main-header">
           <p>My Notes</p>
-          <input type="text" placeholder="search notes..." onChange={handleChangeSearch} value={searchQuery} />
           <button onClick={handleAddClick}>+ Add New Note</button>
         </div>
         <Routes>
