@@ -4,6 +4,8 @@ const Noteform = ({ onAddNote, noteToEdit,onUpdateNote,onCancel}) => {
   const [category, setCategory] = useState('other');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+
+  
   useEffect(() => {
         if (noteToEdit) {
           setTitle(noteToEdit.title);

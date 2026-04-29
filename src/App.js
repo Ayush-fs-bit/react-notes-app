@@ -5,7 +5,7 @@ import Preview from './Preview';
 import Archivepage from './Archivepage';
 import Noteform from './Noteform';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 
@@ -13,25 +13,21 @@ import { useState } from 'react';
 
 function App() {
 
-  const data = [
-    {
-      'id': 1,
-      'title': 'ayush',
-      'content': 'xyz',
-      'category':'work'
-    },
-    {
-      'id': 2,
-      'title': 'secound',
-      'content': 'xyz',
-      'category':'work'
-    }
-  ];
-  const [notes, setNotes] = useState(data)
+
+  const [notes, setNotes] = useState(()=>{
+    const saved=localStorage.getItem('notes');
+    return saved?JSON.parse(saved):[];
+  })
   const [selectedNote, setSelectedNote] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing]=useState(false);
+
+  useEffect(()=>{
+    localStorage.setItem('notes',JSON.stringify(notes))
+  },[notes]);
+
+
 
   const filteredNotes = notes.filter((n) => (
     n.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
