@@ -1,4 +1,10 @@
 const Homepage = ({ notes,onSelectNote }) => {
+  if(notes.length===0){
+    return <div>
+      <h3>No Notes found</h3>
+      <p>Start By Adding First Note</p>
+    </div>
+  }
   
   return (<div className="notes-container">
     {notes.map((note) => (

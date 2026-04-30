@@ -98,7 +98,7 @@ function App() {
     setNotes((prev)=>
       prev.map((n)=>(
         n.id===selectedNote.id
-        ?{...n,isArchived:true}
+        ?{...n,isArchived:!n.isArchived}
         :n
       ))
     )
