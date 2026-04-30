@@ -23,6 +23,7 @@ function App() {
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing]=useState(false);
   const [activeCategory,setActiveCategory]=useState('all');
+ 
 
   useEffect(()=>{
     localStorage.setItem('notes',JSON.stringify(notes))
@@ -35,6 +36,9 @@ function App() {
     const categoryFilter=activeCategory==='all'||n.category===activeCategory;
     return searchFilter && categoryFilter;
 })
+
+  const homeNotes=filteredNotes.filter((n)=>!n.isArchived)
+  const archivedNotes=filteredNotes.filter((n)=>n.isArchived)
   function handleSelectNote(id) {
     let note = notes.find((n) => n.id === id);
     setSelectedNote(note);
@@ -90,6 +94,17 @@ function App() {
    
   }
 
+  function handleArchiveNote(){
+    setNotes((prev)=>
+      prev.map((n)=>(
+        n.id===selectedNote.id
+        ?{...n,isArchived:true}
+        :n
+      ))
+    )
+    setSelectedNote(null);
+  }
+
 
   return (<Router>
     <div className="App">
@@ -100,15 +115,15 @@ function App() {
           <button onClick={handleAddClick}>+ Add New Note</button>
         </div>
         <Routes>
-          <Route path="/" element={<Homepage notes={filteredNotes} onSelectNote={handleSelectNote} />} />
-          <Route path="/archive" element={<Archivepage notes={filteredNotes} />} />
+          <Route path="/" element={<Homepage notes={homeNotes} onSelectNote={handleSelectNote} />} />
+          <Route path="/archive" element={<Archivepage notes={archivedNotes} onSelectNote={handleSelectNote}/>} />
         </Routes>
       </div>
       <div className='right'>
         {isAdding && <Noteform onAddNote={handleAddingNote} />}
         {isEditing && <Noteform onUpdateNote={handleUpdatedNote} noteToEdit={selectedNote} onCancel={handleCancelEdit}/>}
         {!selectedNote && !isAdding && <p>select a note</p>}
-        {!isEditing && selectedNote && <Preview noteSelected={selectedNote} onDelete={handleDeletingNote} onEdit={handleEditingNote}/>}
+        {!isEditing && selectedNote && <Preview noteSelected={selectedNote} onDelete={handleDeletingNote} onEdit={handleEditingNote} onArchive={handleArchiveNote}/>}
       </div>
     </div>
 

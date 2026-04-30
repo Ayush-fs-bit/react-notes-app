@@ -22,7 +22,8 @@ const Noteform = ({ onAddNote, noteToEdit,onUpdateNote,onCancel}) => {
         id:noteToEdit.id,
         title,
         content,
-        category
+        category,
+        isArchived:noteToEdit.isArchived
       })
     } else {
       if (!content.trim()) return;
@@ -30,7 +31,8 @@ const Noteform = ({ onAddNote, noteToEdit,onUpdateNote,onCancel}) => {
         id: Date.now(),
         title,
         content,
-        category
+        category,
+        isArchived:false
       })
       setTitle('');
       setContent('');
