@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const Sidebar = ({onSearch,input,onCategory}) => {
+const Sidebar = ({onSearch,input,onCategory,counts,total}) => {
 
   function handleCategory(category){
     onCategory(category);
@@ -12,12 +12,12 @@ const Sidebar = ({onSearch,input,onCategory}) => {
       <input type="text" placeholder="search notes..." onChange={onSearch} value={input} />
       <div className="sidebar-categories">
         <p>Categories</p>
-        <button onClick={()=>handleCategory('all')}>All</button>
-        <button onClick={()=>handleCategory('work')}>Work</button>
-        <button onClick={()=>handleCategory('study')}>Study</button>
-        <button onClick={()=>handleCategory('personal')}>Personal</button>
-        <button onClick={()=>handleCategory('idea')}>Idea</button>
-        <button onClick={()=>handleCategory('other')}>Other</button>
+        <button onClick={()=>handleCategory('all')}>All {total||0}</button>
+        <button onClick={()=>handleCategory('work')}>Work {counts.work||0}</button>
+        <button onClick={()=>handleCategory('study')}>Study {counts.study||0}</button>
+        <button onClick={()=>handleCategory('personal')}>Personal {counts.personal||0}</button>
+        <button onClick={()=>handleCategory('idea')}>Idea {counts.idea||0}</button>
+        <button onClick={()=>handleCategory('other')}>Other {counts.other||0}</button>
       </div>
       
       <Link className="nav-link" to="/">Notes</Link>

@@ -4,7 +4,7 @@ import Homepage from './Homepage';
 import Preview from './Preview';
 import Archivepage from './Archivepage';
 import Noteform from './Noteform';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation} from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 
@@ -23,6 +23,8 @@ function App() {
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing]=useState(false);
   const [activeCategory,setActiveCategory]=useState('all');
+  const location=useLocation();
+  
  
 
   useEffect(()=>{
@@ -39,6 +41,26 @@ function App() {
 
   const homeNotes=filteredNotes.filter((n)=>!n.isArchived)
   const archivedNotes=filteredNotes.filter((n)=>n.isArchived)
+
+  const homeNotesCategoryCount=homeNotes.reduce((acc,note)=>{
+    const cat=note.category||'other';
+    acc[cat]=(acc[cat]||0)+1;
+    return acc;
+  },{})
+
+  const archiveNotesCategoryCount=archivedNotes.reduce((acc,note)=>{
+    const cat=note.category||'other';
+    acc[cat]=(acc[cat]||0)+1;
+    return acc;
+  },{})
+
+  const countsToShow=location.pathname==="/archive"?archiveNotesCategoryCount:homeNotesCategoryCount;
+
+  const totalArchiveNotes=archivedNotes.length;
+  const totalHomeNotes=homeNotes.length;
+
+  const totalCount=location.pathname==="/archive"?totalArchiveNotes:totalHomeNotes;
+
   function handleSelectNote(id) {
     let note = notes.find((n) => n.id === id);
     setSelectedNote(note);
@@ -106,9 +128,9 @@ function App() {
   }
 
 
-  return (<Router>
+  return (
     <div className="App">
-      <Sidebar onSearch={handleChangeSearch} input={searchQuery} onCategory={handleCategoryChange}/>
+      <Sidebar onSearch={handleChangeSearch} input={searchQuery} onCategory={handleCategoryChange} counts={countsToShow} total={totalCount}/>
       <div className="main">
         <div className="main-header">
           <p>My Notes</p>
@@ -127,7 +149,6 @@ function App() {
       </div>
     </div>
 
-  </Router>
   );
 }
 
