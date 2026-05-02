@@ -4,6 +4,10 @@ const Noteform = ({ onAddNote, noteToEdit,onUpdateNote,onCancel}) => {
   const [category, setCategory] = useState('other');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [tagsInput,setTagsInput]=useState('');
+  const [tags,setTags]=useState([]);
+  
+ 
 
   
   useEffect(() => {
@@ -11,6 +15,7 @@ const Noteform = ({ onAddNote, noteToEdit,onUpdateNote,onCancel}) => {
           setTitle(noteToEdit.title);
           setContent(noteToEdit.content);
           setCategory(noteToEdit.category);
+          setTags(noteToEdit.tags)
         }
       }, [noteToEdit]);
 
@@ -23,7 +28,8 @@ const Noteform = ({ onAddNote, noteToEdit,onUpdateNote,onCancel}) => {
         title,
         content,
         category,
-        isArchived:noteToEdit.isArchived
+        isArchived:noteToEdit.isArchived,
+        tags:noteToEdit.tags||[]
       })
     } else {
       if (!content.trim()) return;
@@ -32,7 +38,8 @@ const Noteform = ({ onAddNote, noteToEdit,onUpdateNote,onCancel}) => {
         title,
         content,
         category,
-        isArchived:false
+        isArchived:false,
+        tags:tags
       })
       setTitle('');
       setContent('');
@@ -46,6 +53,13 @@ const Noteform = ({ onAddNote, noteToEdit,onUpdateNote,onCancel}) => {
     setContent('');
     setCategory('other');
     onCancel && onCancel();
+  }
+
+  function handleTagAddition(){
+    if(!tagsInput)return;
+
+    setTags((prev)=>[...prev,tagsInput]);
+    setTagsInput('');
   }
 
   return (
@@ -71,6 +85,14 @@ const Noteform = ({ onAddNote, noteToEdit,onUpdateNote,onCancel}) => {
         </select>
         <label htmlFor="formContent">Content</label>
         <textarea id="formContent" placeholder="start writing your notes..." value={content} onChange={(e) => setContent(e.target.value)}></textarea>
+        <div className="form-tags-container">
+          <input type="text" placeholder="Add tag..." id="formTag" value={tagsInput} onChange={(e)=>setTagsInput(e.target.value.trim())}/>
+          <button type="button" onClick={handleTagAddition}>Add</button></div>
+        <div className="added-tags">
+          {tags.map((t)=>{
+           return <div key={t}>{t}</div>
+          })}
+        </div>
         <button type="button" onClick={handleCancel}>Cancel</button>
         <button type="submit">Save</button>
       </form>
