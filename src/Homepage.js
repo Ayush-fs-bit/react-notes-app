@@ -1,4 +1,4 @@
-const Homepage = ({ notes,onSelectNote }) => {
+const Homepage = ({ notes,onSelectNote,onTagClick }) => {
   if(notes.length===0){
     return <div>
       <h3>No Notes found</h3>
@@ -6,9 +6,14 @@ const Homepage = ({ notes,onSelectNote }) => {
     </div>
   }
 
+  function handleTagClick(selectedTag){
+    onTagClick(selectedTag)
+  }
+
   function renderTags(tags){
     if(!tags||tags.length===0)return;
-    return tags.map((t)=>(<div key={t}>#{t}</div>))
+    return tags.map((t)=>(<div key={t} onClick={(e)=>{e.stopPropagation();
+      handleTagClick(t)}}>#{t}</div>))
   }
   
   return (<div className="notes-container">

@@ -23,6 +23,7 @@ function App() {
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing]=useState(false);
   const [activeCategory,setActiveCategory]=useState('all');
+  const [selectedTag,setSelectedTag]=useState('all');
   const location=useLocation();
   
  
@@ -31,24 +32,30 @@ function App() {
     localStorage.setItem('notes',JSON.stringify(notes))
   },[notes]);
 
+  const baseFilteredNotes = notes.filter((n) => {
+    const searchFilter =n.title.toLowerCase().includes(searchQuery.toLowerCase()) ||n.content.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const tagFilter =selectedTag === "all" || n.tags?.includes(selectedTag);
+
+    return searchFilter && tagFilter;
+  });
 
 
-  const filteredNotes = notes.filter((n) =>{
-    const searchFilter=n.title.toLowerCase().includes(searchQuery.toLowerCase())|| n.content.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredNotes = baseFilteredNotes.filter((n) =>{
     const categoryFilter=activeCategory==='all'||n.category===activeCategory;
-    return searchFilter && categoryFilter;
+    return categoryFilter;
 })
 
   const homeNotes=filteredNotes.filter((n)=>!n.isArchived)
   const archivedNotes=filteredNotes.filter((n)=>n.isArchived)
 
-  const homeNotesCategoryCount=homeNotes.reduce((acc,note)=>{
+  const homeNotesCategoryCount=baseFilteredNotes.filter((n)=>!n.isArchived).reduce((acc,note)=>{
     const cat=note.category||'other';
     acc[cat]=(acc[cat]||0)+1;
     return acc;
   },{})
 
-  const archiveNotesCategoryCount=archivedNotes.reduce((acc,note)=>{
+  const archiveNotesCategoryCount=baseFilteredNotes.filter((n)=>n.isArchived).reduce((acc,note)=>{
     const cat=note.category||'other';
     acc[cat]=(acc[cat]||0)+1;
     return acc;
@@ -56,8 +63,8 @@ function App() {
 
   const countsToShow=location.pathname==="/archive"?archiveNotesCategoryCount:homeNotesCategoryCount;
 
-  const totalArchiveNotes=archivedNotes.length;
-  const totalHomeNotes=homeNotes.length;
+  const totalArchiveNotes=baseFilteredNotes.length;
+  const totalHomeNotes=baseFilteredNotes.length;
 
   const totalCount=location.pathname==="/archive"?totalArchiveNotes:totalHomeNotes;
 
@@ -127,6 +134,17 @@ function App() {
     setSelectedNote(null);
   }
 
+  function handleSelectedTag(tag){
+    setSelectedTag(tag);
+    setSearchQuery('');
+    setActiveCategory('all');
+  }
+
+  function handleClearTags(){
+    setSelectedTag('all');
+    setSearchQuery('');
+    setActiveCategory('all')
+  }
 
   return (
     <div className="App">
@@ -135,17 +153,20 @@ function App() {
         <div className="main-header">
           <p>My Notes</p>
           <button onClick={handleAddClick}>+ Add New Note</button>
+          {selectedTag!=='all' && <div>
+              <p>Filtered By {selectedTag}</p><button onClick={handleClearTags}>clear</button>
+            </div>}
         </div>
         <Routes>
-          <Route path="/" element={<Homepage notes={homeNotes} onSelectNote={handleSelectNote} />} />
-          <Route path="/archive" element={<Archivepage notes={archivedNotes} onSelectNote={handleSelectNote}/>} />
+          <Route path="/" element={<Homepage notes={homeNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag}/>} />
+          <Route path="/archive" element={<Archivepage notes={archivedNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag}/>} />
         </Routes>
       </div>
       <div className='right'>
         {isAdding && <Noteform onAddNote={handleAddingNote} />}
         {isEditing && <Noteform onUpdateNote={handleUpdatedNote} noteToEdit={selectedNote} onCancel={handleCancelEdit}/>}
         {!selectedNote && !isAdding && <p>select a note</p>}
-        {!isEditing && selectedNote && <Preview noteSelected={selectedNote} onDelete={handleDeletingNote} onEdit={handleEditingNote} onArchive={handleArchiveNote}/>}
+        {!isEditing && selectedNote && <Preview noteSelected={selectedNote} onDelete={handleDeletingNote} onEdit={handleEditingNote} onArchive={handleArchiveNote} onTagClick={handleSelectedTag}/>}
       </div>
     </div>
 

@@ -29,7 +29,7 @@ const Noteform = ({ onAddNote, noteToEdit,onUpdateNote,onCancel}) => {
         content,
         category,
         isArchived:noteToEdit.isArchived,
-        tags:noteToEdit.tags||[]
+        tags:tags
       })
     } else {
       if (!content.trim()) return;

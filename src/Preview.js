@@ -1,11 +1,17 @@
-const Preview = ({noteSelected,onDelete,onEdit,onArchive}) => {
+const Preview = ({noteSelected,onDelete,onEdit,onArchive,onTagClick}) => {
   if(!noteSelected){
     return <div className="preview">Select A Note</div>
   }
+  function handleTagClick(selectedTag){
+    onTagClick(selectedTag)
+  }
+
   function renderTags(tags){
     if(!tags||tags.length===0)return;
-    return tags.map((t)=>(<div key={t}>#{t}</div>))
+    return tags.map((t)=>(<div key={t} onClick={(e)=>{e.stopPropagation();
+      handleTagClick(t)}}>#{t}</div>))
   }
+  
   return ( 
     <div className="preview">
       <button onClick={onEdit}>edit</button>
