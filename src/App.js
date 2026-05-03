@@ -148,7 +148,7 @@ function App() {
 
   return (
     <div className="App">
-      <Sidebar onSearch={handleChangeSearch} input={searchQuery} onCategory={handleCategoryChange} counts={countsToShow} total={totalCount}/>
+      <Sidebar onSearch={handleChangeSearch} input={searchQuery} onCategory={handleCategoryChange} counts={countsToShow} total={totalCount} activeCategory={activeCategory}/>
       <div className="main">
         <div className="main-header">
           <p>My Notes</p>
