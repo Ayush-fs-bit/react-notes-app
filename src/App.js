@@ -151,15 +151,15 @@ function App() {
       <Sidebar onSearch={handleChangeSearch} input={searchQuery} onCategory={handleCategoryChange} counts={countsToShow} total={totalCount} activeCategory={activeCategory}/>
       <div className="main">
         <div className="main-header">
-          <p>My Notes</p>
-          <button onClick={handleAddClick}>+ Add New Note</button>
-          {selectedTag!=='all' && <div>
-              <p>Filtered By {selectedTag}</p><button onClick={handleClearTags}>clear</button>
+          <h1 className="main-heading">{location.pathname==="/"?"My Notes":"Archive Notes"}</h1>
+          <button onClick={handleAddClick} className='add-note-btn'>+ Add New Note</button>
+          {selectedTag!=='all' && <div className='tag-filter-msg'>
+              <p>Filtered By Tag "{selectedTag}"</p><button onClick={handleClearTags}>clear</button>
             </div>}
         </div>
         <Routes>
-          <Route path="/" element={<Homepage notes={homeNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag}/>} />
-          <Route path="/archive" element={<Archivepage notes={archivedNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag}/>} />
+          <Route path="/" element={<Homepage notes={homeNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag} selectedNote={selectedNote}/>} />
+          <Route path="/archive" element={<Archivepage notes={archivedNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag}selectedNote={selectedNote}/>} />
         </Routes>
       </div>
       <div className='right'>

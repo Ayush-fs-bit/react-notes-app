@@ -7,6 +7,10 @@ const Sidebar = ({onSearch,input,onCategory,counts,total,activeCategory}) => {
     onCategory(category);
   }
 
+
+
+  
+
   return ( <div className="sidebar">
     <div className="top">
       <div className="logo">LOGO</div>
@@ -14,16 +18,16 @@ const Sidebar = ({onSearch,input,onCategory,counts,total,activeCategory}) => {
       <div className="sidebar-categories">
         <p>Categories</p>
         <button className={activeCategory==="all"?"selected":""} onClick={()=>handleCategory('all')}>All <span>{total||0}</span></button>
-        <button className={activeCategory==="work"?"selected":""} onClick={()=>handleCategory('work')}>Work <span>{counts.work||0}</span></button>
+        <button className={activeCategory==="work"?"selected":""} onClick={()=>handleCategory('work')}> Work <span>{counts.work||0}</span></button>
         <button className={activeCategory==="study"?"selected":""} onClick={()=>handleCategory('study')}>Study <span>{counts.study||0}</span></button>
         <button className={activeCategory==="personal"?"selected":""} onClick={()=>handleCategory('personal')}>Personal<span>{counts.personal||0}</span></button>
         <button className={activeCategory==="idea"?"selected":""} onClick={()=>handleCategory('idea')}>Idea <span>{counts.idea||0}</span></button>
         <button className={activeCategory==="other"?"selected":""} onClick={()=>handleCategory('other')}>Other <span>{counts.other||0}</span></button>
       </div>
-      <Link className={`nav-link ${location.pathname==="/"?'selected':""}`} to="/">Notes</Link>
-      <p className="nav-link">To-do</p>
+      <Link className={`nav-link ${location.pathname==="/"?'selected':""}`} to="/"> Notes</Link>
+      <p className="nav-link"> To-do</p>
       
-      <Link className={`nav-link ${location.pathname==="/archive"?'selected':""}`} to="/archive" >Archive</Link>
+      <Link className={`nav-link ${location.pathname==="/archive"?'selected':""}`} to="/archive" > Archive</Link>
     </div>
     <div className="bottom">
       <p>setting</p>
