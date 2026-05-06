@@ -1,35 +1,35 @@
 import { useEffect, useState } from "react";
 
-const Noteform = ({ onAddNote, noteToEdit,onUpdateNote,onCancel}) => {
+const Noteform = ({ onAddNote, noteToEdit, onUpdateNote, onCancel }) => {
   const [category, setCategory] = useState('other');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [tagsInput,setTagsInput]=useState('');
-  const [tags,setTags]=useState([]);
-  
- 
+  const [tagsInput, setTagsInput] = useState('');
+  const [tags, setTags] = useState([]);
 
-  
+
+
+
   useEffect(() => {
-        if (noteToEdit) {
-          setTitle(noteToEdit.title);
-          setContent(noteToEdit.content);
-          setCategory(noteToEdit.category);
-          setTags(noteToEdit.tags)
-        }
-      }, [noteToEdit]);
+    if (noteToEdit) {
+      setTitle(noteToEdit.title);
+      setContent(noteToEdit.content);
+      setCategory(noteToEdit.category);
+      setTags(noteToEdit.tags)
+    }
+  }, [noteToEdit]);
 
 
   function handleSubmit() {
     if (noteToEdit) {
-      if(!content.trim())return;
+      if (!content.trim()) return;
       onUpdateNote({
-        id:noteToEdit.id,
+        id: noteToEdit.id,
         title,
         content,
         category,
-        isArchived:noteToEdit.isArchived,
-        tags:tags
+        isArchived: noteToEdit.isArchived,
+        tags: tags
       })
     } else {
       if (!content.trim()) return;
@@ -38,8 +38,8 @@ const Noteform = ({ onAddNote, noteToEdit,onUpdateNote,onCancel}) => {
         title,
         content,
         category,
-        isArchived:false,
-        tags:tags
+        isArchived: false,
+        tags: tags
       })
       setTitle('');
       setContent('');
@@ -55,16 +55,16 @@ const Noteform = ({ onAddNote, noteToEdit,onUpdateNote,onCancel}) => {
     onCancel && onCancel();
   }
 
-  function handleTagAddition(){
-    if(!tagsInput)return;
+  function handleTagAddition() {
+    if (!tagsInput) return;
 
-    setTags((prev)=>[...prev,tagsInput]);
+    setTags((prev) => [...prev, tagsInput]);
     setTagsInput('');
   }
 
   return (
     <div className="note-form">
-      <header>
+      <header className="note-form-head">
         <h2>{noteToEdit ? "Edit Note" : "Add New Note"}</h2>
         <p>{noteToEdit ? "update your note" : "create a new note and get started"}</p>
       </header>
@@ -74,27 +74,45 @@ const Noteform = ({ onAddNote, noteToEdit,onUpdateNote,onCancel}) => {
       }}>
         <label htmlFor="formTitle">Title</label>
         <input type="text" id="formTitle" placeholder="Enter a note title..." value={title} onChange={(e) => setTitle(e.target.value)} />
-        <label htmlFor="formCategories">Category</label>
-        <select id="formCategories" value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value={'other'}>other</option>
-          <option value={'work'}>work</option>
-          <option value={'study'}>study</option>
-          <option value={'personal'}>personal</option>
-          <option value={'idea'}>idea</option>
 
-        </select>
+
+
         <label htmlFor="formContent">Content</label>
         <textarea id="formContent" placeholder="start writing your notes..." value={content} onChange={(e) => setContent(e.target.value)}></textarea>
-        <div className="form-tags-container">
-          <input type="text" placeholder="Add tag..." id="formTag" value={tagsInput} onChange={(e)=>setTagsInput(e.target.value.trim())}/>
-          <button type="button" onClick={handleTagAddition}>Add</button></div>
-        <div className="added-tags">
-          {tags.map((t)=>{
-           return <div key={t}>{t}</div>
-          })}
+
+
+
+
+        <div className="form-partesian">
+          <div className="left">
+            <label htmlFor="formCategories">Category</label>
+            <select id="formCategories" value={category} onChange={(e) => setCategory(e.target.value)}>
+              <option className="option" value={'other'}>other</option>
+              <option className="option" value={'work'}>work</option>
+              <option className="option" value={'study'}>study</option>
+              <option className="option" value={'personal'}>personal</option>
+              <option className="option" value={'idea'}>idea</option>
+
+            </select>
+          </div>
+          <div className="right">
+            <div className="form-tags-container">
+              <label htmlFor="tagInput">Tags</label>
+              <input type="text" placeholder="Add tag..." id="tagInput" value={tagsInput} onChange={(e) => setTagsInput(e.target.value.trim())} />
+              <button type="button" onClick={handleTagAddition}>Add</button></div>
+            <div className="added-tags">
+              {tags.map((t) => {
+                return <span className="form-tags" key={t}>{t}</span>
+              })}
+            </div>
+          </div>
         </div>
-        <button type="button" onClick={handleCancel}>Cancel</button>
-        <button type="submit">Save</button>
+
+
+        <div className="form-buttons">
+        <button type="button" onClick={handleCancel} className="cancel-btn">Cancel</button>
+        <button type="submit" className="save-btn">Save</button>
+        </div>
       </form>
 
     </div>);
