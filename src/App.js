@@ -24,8 +24,15 @@ function App() {
   const [isEditing, setIsEditing]=useState(false);
   const [activeCategory,setActiveCategory]=useState('all');
   const [selectedTag,setSelectedTag]=useState('all');
+  const [activeTheme,setActiveTheme]=useState(()=>{
+    const theme=localStorage.getItem('theme');
+    return theme?JSON.parse(theme):"light";
+  });
   const location=useLocation();
   
+  useEffect(()=>{
+    localStorage.setItem('theme',JSON.stringify(activeTheme));
+  },[activeTheme]);
  
 
   useEffect(()=>{
@@ -63,8 +70,8 @@ function App() {
 
   const countsToShow=location.pathname==="/archive"?archiveNotesCategoryCount:homeNotesCategoryCount;
 
-  const totalArchiveNotes=baseFilteredNotes.length;
-  const totalHomeNotes=baseFilteredNotes.length;
+  const totalArchiveNotes=archivedNotes.length;
+  const totalHomeNotes=homeNotes.length;
 
   const totalCount=location.pathname==="/archive"?totalArchiveNotes:totalHomeNotes;
 
@@ -145,10 +152,13 @@ function App() {
     setSearchQuery('');
     setActiveCategory('all')
   }
+  function handleToggleTheme(){
+   setActiveTheme(prev => prev === "light" ? "dark" : "light")
+  }
 
   return (
-    <div className="App">
-      <Sidebar onSearch={handleChangeSearch} input={searchQuery} onCategory={handleCategoryChange} counts={countsToShow} total={totalCount} activeCategory={activeCategory}/>
+    <div id="App" className={activeTheme==='dark'?'dark':""}>
+      <Sidebar onSearch={handleChangeSearch} input={searchQuery} onCategory={handleCategoryChange} counts={countsToShow} total={totalCount} activeCategory={activeCategory} onToggle={handleToggleTheme}/>
       <div className="main">
         <div className="main-header">
           <h1 className="main-heading">{location.pathname==="/"?"My Notes":"Archive Notes"}</h1>

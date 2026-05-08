@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 
-const Sidebar = ({onSearch,input,onCategory,counts,total,activeCategory}) => {
+const Sidebar = ({onSearch,input,onCategory,counts,total,activeCategory,onToggle}) => {
 
   const location=useLocation();
   function handleCategory(category){
@@ -31,7 +31,7 @@ const Sidebar = ({onSearch,input,onCategory,counts,total,activeCategory}) => {
     </div>
     <div className="bottom">
       <p>setting</p>
-      <p>Toggle theme</p>
+      <p onClick={onToggle}>Toggle theme</p>
     </div>
   </div> );
 }

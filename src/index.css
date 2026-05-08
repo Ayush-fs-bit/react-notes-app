@@ -11,6 +11,10 @@
 
 .sidebar .bottom p {
   padding: 10px 0;
+  cursor: pointer;
+}
+#App.dark{
+ background-color: black;
 }
 
 .sidebar input {
@@ -40,7 +44,7 @@
   background-color: #fcfbfc;
   color: #a1a1a1;
   border-radius: 5px;
-
+  cursor: pointer;
 }
 
 .sidebar-categories .selected {
@@ -91,7 +95,7 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.App {
+#App {
   display: grid;
   min-height: 100vh;
   grid-template-columns: 240px 420px 1fr;
@@ -412,5 +416,7 @@ form select {
   line-height: 1.7;
   color: #474747;
 }
+
+
 
 
