@@ -1,26 +1,71 @@
+:root{
+  --sidebar-bc:#fcfbfc;
+  --searchInput-bc:#ffffff;
+  --bottomBorder:#D5D6D5;
+  --sidebarNav-bc:#fcfbfc;
+  --sidebarNav:#a1a1a1;
+  --sidebarNavSelected-bc:#ffffff;
+  --sidebarNavSelected:#2F3A4A;
+  --mainRightBorder:#eee;
+  --noteCard-bc:#fcfbfc;
+  --noteCardSelected-bc:#f6f6f6;
+  --addbtn-bc:#f6f6f6;
+  --addbtnHover-bc:#f2f2f2;
+  --noteTitle:#8d8d8d;
+  --noteContent:#bdbdbd;
+  --noteTitleSelected:#131313;
+  --noteContentSelected:#6b6b6b;
+  --noteTags-bc:#f7f7f7;
+  --noteTags:#cccccc;
+  --noteTagsSelected-bc:#eeefef;
+  --noteTagsSelected:#4F514F;
+  --clearbtn-bc:#F3F4F6;
+  --clearbtnHover-bc:#E5E7EB;
+  --noteFromSecoundarytext:#4F514F;
+  --borderFormInput:#E5E7EB;
+  --formInput-bc:#F9FAFB;
+  --borderFormInputSelected:#CBD5E1;
+  --formInputSelected-bc:#FFFFFF;
+  --tagsAddbtn-bc:#1a1a1a;
+  --tagsAddbtn:#ffffff;
+  --formTags-bc:#F3F4F6;
+  --cancelbtn-bc:#F3F4F6;
+  --cancelbtn:#374151;
+  --cancelbtnHover-bc:#fb4646;
+  --cancelbtnHover:#ffffff;
+  --savebtn-bc:#1a1a1a;
+  --savebtn:#ffffff;
+  --savebtnHover-bc:#262626;
+  --noteInfoLeft:#808080;
+  --previewTags:#eeefef;
+  --previewbtn-bc:#F3F4F6;
+  --previewbtn:#374151;
+  --previewbtnHover-bc:#E5E7EB;
+  --previewContent:#474747;
+}
+.dark{
+  
+}
+
+
 .sidebar {
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 20px 15px;
-  /* border-right:1px solid #eee; */
-  /* background: #F8F9FB; */
-  background-color: #fcfbfc;
+  background-color:var(--sidebar-bc) ;
 }
 
 .sidebar .bottom p {
   padding: 10px 0;
   cursor: pointer;
 }
-#App.dark{
- background-color: black;
-}
 
 .sidebar input {
   display: block;
-  background-color: #ffffff;
-  color: #2F3A4A;
+  background-color: var(--searchInput-bc);
+  font-weight: 600;
   border: none;
   width: 100%;
   padding: 10px;
@@ -31,7 +76,7 @@
 .sidebar-categories {
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid var(--bottomBorder);
   padding-bottom: 10px;
   margin-bottom: 10px;
 }
@@ -41,23 +86,23 @@
   justify-content: space-between;
   padding: 10px;
   border: none;
-  background-color: #fcfbfc;
-  color: #a1a1a1;
+  background-color: var(--sidebarNav-bc);
+  color: var(--sidebarNav);
   border-radius: 5px;
   cursor: pointer;
 }
 
 .sidebar-categories .selected {
-  background: #ffffff;
-  color: #2F3A4A;
+  background: var(--sidebarNavSelected-bc);
+  color: var(--sidebarNavSelected);
   font-weight: 600;
 }
 
 .nav-link {
   padding: 10px;
   border: none;
-  background-color: #fcfbfc;
-  color: #a1a1a1;
+  background-color: var(--sidebarNav-bc);
+  color: var(--sidebarNav);
   border-radius: 5px;
   text-decoration: none;
   display: block;
@@ -67,24 +112,25 @@
 }
 
 .nav-link.selected {
-  background: #ffffff;
-  color: #2F3A4A;
+  background: var(--sidebarNavSelected-bc);
+  color: var(--sidebarNavSelected);
   font-weight: 600;
 }
 
 .sidebar .bottom p {
   padding: 10px;
-  color: #111827;
-  background-color: #ffffff;
+  color:var(--sidebarNavSelected);
+  background-color: var(--sidebarNavSelected-bc);
   border-radius: 5px;
   margin-bottom: 5px;
+  font-weight: 600;
 }
 
 
 .logo {
   padding-top: 0;
   padding-bottom: 20px;
-  color: #111827;
+  color: var(--sidebarNavSelected);
   font-weight: 600;
 }
 
@@ -105,7 +151,7 @@
 
 .main {
   padding: 20px 10px;
-  border-right: 1px solid #eee;
+  border-right: 1px solid var(--mainRightBorder);
 }
 
 .main-header input {
@@ -121,7 +167,7 @@
 
 .note-card {
   padding: 10px 15px;
-  background-color: #fcfbfc;
+  background-color: var(--noteCard-bc);
   margin-bottom: 5px;
   border-radius: 5px;
   cursor: pointer;
@@ -134,11 +180,11 @@
 }
 
 .note-card.selected {
-  background-color: #f6f6f6;
+  background-color: var(--noteCardSelected-bc);
 }
 
 .add-note-btn {
-  background-color: #f6f6f6;
+  background-color: var(--addbtn-bc);
   border: none;
   width: 100%;
   text-align: start;
@@ -152,18 +198,18 @@
 }
 
 .add-note-btn:hover {
-  background-color: #f2f2f2;
+  background-color: var(--addbtnHover-bc);
 }
 
 .note-title {
-  color: #8d8d8d;
+  color: var(--noteTitle);
   padding-bottom: 5px;
   font-size: 18px;
   font-weight: 600;
 }
 
 .note-content {
-  color: #bdbdbd;
+  color: var(--noteContent);
   padding-bottom: 5px;
   font-size: 13px;
   line-height: 1.5;
@@ -171,21 +217,21 @@
 }
 
 .note-card.selected .note-title {
-  color: #131313;
+  color: var(--noteTitleSelected);
 }
 
 .note-card.selected .note-content {
-  color: #6b6b6b;
+  color: var(--noetConetentSelected);
 }
 
 .note-card.selected .tags {
-  background-color: #eeefef;
-  color: #4F514F;
+  background-color: var(--noteTagsSelected-bc);
+  color: var(--noteTagsSelected);
 }
 
 .tags {
-  background-color: #f7f7f7;
-  color: #cccccc;
+  background-color: var(--noteTags-bc);
+  color: var(--noteTags);
   padding: 2px 5px;
   font-size: 13px;
   border-radius: 5px;
@@ -205,8 +251,9 @@
 }
 
 .tag-filter-msg button {
+  cursor: pointer;
   padding: 3px 10px;
-  background-color: #F3F4F6;
+  background-color:var(--clearbtn-bc);
   border: none;
   border-radius: 5px;
   font-weight: 600;
@@ -214,7 +261,7 @@
 }
 
 .tag-filter-msg button:hover {
-  background-color: #E5E7EB;
+  background-color: var(--clearbtnHover-bc);
 }
 
 .empty-state {
@@ -232,11 +279,11 @@
 }
 
 .note-form-head p {
-  color: #4F514F;
+  color: var(--noteFromSecoundarytext);
 }
 
 .note-form header {
-  border-bottom: 1px solid #D5D6D5;
+  border-bottom: 1px solid var(--bottomBorder);
   padding-bottom: 10px;
 }
 
@@ -261,29 +308,27 @@ form label {
 .note-form input,
 .note-form textarea,
 .note-form select {
-  border: 1px solid #E5E7EB;
-  background: #F9FAFB;
+  border: 1px solid var(--borderFormInput);
+  background: var(--formInput-bc);
   outline: none;
 }
 .note-form input:focus,
 .note-form textarea:focus,
 .note-form select:focus {
-  border-color: #CBD5E1;
-  background: #FFFFFF;
+  border-color: var(--borderFormInputSelected);
+  background: var(--formInputSelected-bc);
 }
 form textarea {
   line-height: 1.6;
   width: 100%;
   height: 300px;
   padding: 5px;
-  border: 1.5px solid hsl(0, 0%, 0%);
   border-radius: 5px;
 }
 
 form select {
   padding: 6px 10px;
   text-align: start;
-  border: 1.5px solid hsl(0, 0%, 0%);
   border-radius: 5px;
 }
 
@@ -299,10 +344,10 @@ form select {
 
 .form-tags-container button {
   padding: 5px 8px;
-  background-color: hsl(0, 0%, 10%);
-  color: white;
+  background-color: var(--tagsAddbtn-bc);
+  color: var(--tagsAddbtn);
   font-weight: 600;
-  border: 1.5px solid hsl(0, 0%, 0%);
+  border: 1.5px solid var(--tagsAddbtn-bc); 
   border-top-left-radius: none;
   border-top-right-radius: 5px;
   border-bottom-right-radius:5px;
@@ -320,7 +365,7 @@ form select {
 
 .form-tags {
   padding: 2px 10px;
-  background-color: #F3F4F6;
+  background-color: var(--formTags-bc);
   border-radius: 5px;
 }
 
@@ -336,33 +381,28 @@ form select {
   border: none;
   border-radius: 5px;
   font-weight: 600;
-  background: #F3F4F6;
-  color: #374151;
+  background: var(--cancelbtn-bc);
+  color: var(--cancelbtn);
 }
 
 .save-btn {
   padding: 5px 15px;
   border: none;
   border-radius: 5px;
-  background-color: hsl(0, 0%, 10%);
-  color: white;
+  background-color: var(--savebtn-bc);
+  color: var(--savebtn);
   font-weight: 600;
 }
 .save-btn:hover{
-  background-color: hsl(0, 0%, 15%);
+  background-color: var(--savebtnHover-bc);
   cursor: pointer;
 }
 .cancel-btn:hover{
-  background-color: rgb(253, 90, 90);
+  background-color: var(--cancelbtnHover-bc);
   cursor: pointer;
-  color: white;
+  color: var(--cancelbtnHover);
 }
-.option{
-  background-color: #E5E7EB;
-}
-.option:hover{
-  background-color: #eee;
-}
+
 
 .preview {
   padding:20px 30px;
@@ -376,13 +416,13 @@ form select {
 .note-info{
   display: grid;
   grid-template-columns: 20% 80%;
-  border-bottom: 1px solid #E5E7EB;
+  border-bottom: 1px solid var(--bottomBorder);
 }
 .note-info *{
   margin-bottom: 10px;
 }
 .note-info .left{
-  color: #808080;
+  color: var(--noteInfoLeft);
 }
 .preview-tags-container{
   display: flex;
@@ -391,7 +431,7 @@ form select {
 }
 .preview-tags{
   padding: 2px 10px;
-  background-color: #eeefef;
+  background-color: var(--previewTags);
   border-radius: 5px;
   cursor: pointer;
   text-align: center;
@@ -404,17 +444,17 @@ form select {
   padding: 8px 14px;
   border: none;
   border-radius: 6px;
-  background-color: #F3F4F6;
-  color: #374151;
+  background-color: var(--preveiwbtn-bc);
+  color: var(--preveiwbtn);
   cursor: pointer;
 }
 .preview-btns *:hover{
-  background-color: #E5E7EB;
+  background-color: var(--preveiwbtnHover-bc);
 }
 .preview-content{
   margin-top: 20px;
   line-height: 1.7;
-  color: #474747;
+  color: var(--previewContent);
 }
 
 
