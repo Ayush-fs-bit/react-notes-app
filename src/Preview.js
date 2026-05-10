@@ -17,7 +17,7 @@ const Preview = ({ noteSelected, onDelete, onEdit, onArchive, onTagClick }) => {
   return (
     <div className="preview">
       <div className="preview-header">
-        <h1>{noteSelected.title}</h1>
+        <h1 className="preview-title">{noteSelected.title}</h1>
         <div className="preview-btns">
           <button onClick={onEdit}>edit</button>
           <button onClick={onArchive}>

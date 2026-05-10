@@ -1,4 +1,5 @@
 :root{
+  --app-bc:#ffffff;
   --sidebar-bc:#fcfbfc;
   --searchInput-bc:#ffffff;
   --bottomBorder:#D5D6D5;
@@ -10,6 +11,7 @@
   --noteCard-bc:#fcfbfc;
   --noteCardSelected-bc:#f6f6f6;
   --addbtn-bc:#f6f6f6;
+  --addbtn:#000000;
   --addbtnHover-bc:#f2f2f2;
   --noteTitle:#8d8d8d;
   --noteContent:#bdbdbd;
@@ -44,7 +46,51 @@
   --previewContent:#474747;
 }
 .dark{
-  
+  --app-bc:#000000;
+  --sidebar-bc:#0d0d0d;
+  --searchInput-bc:hsl(0,0%,10%);
+  --bottomBorder:#222124;
+  --sidebarNav-bc:#0d0d0d;
+  --sidebarNav:#4b4d4e;
+  --sidebarNavSelected-bc:hsl(0,0%,10%);
+  --sidebarNavSelected:#f7f9fa;
+  --mainRightBorder:#353438;
+  --noteCard-bc:#0d0d0d;
+  --noteCardSelected-bc:#1a1a1a;
+  --addbtn-bc:#1a1a1a;
+  --addbtn:#f7f9fa;
+  --addbtnHover-bc:#222124;
+  --noteTitle:#8a8d91;
+  --noteContent:#595b5d;
+  --noteTitleSelected:#f7f9fa;
+  --noteContentSelected:#8a8d91;
+  --noteTags-bc:hsl(0,0%,8%);
+  --noteTags:#595b5d;
+  --noteTagsSelected-bc:hsl(0,0%,13%);
+  --noteTagsSelected:#8a8d91;
+  --clearbtn-bc:#1c1b1d;
+  --clearbtnHover-bc:#222124;
+  --noteFromSecoundarytext:#8a8d91;
+  --borderFormInput:#191b1d;
+  --formInput-bc:hsl(0,0%,5%);
+  --borderFormInputSelected:#1c1b1d;
+  --formInputSelected-bc:#000000;
+  --tagsAddbtn-bc:hsl(0,0%,10%);
+  --tagsAddbtn:#f7f9fa;
+  --formTags-bc:hsl(0,0%,10%);
+  --cancelbtn-bc:hsl(0,0%,10%);
+  --cancelbtn:#f7f9fa;
+  --cancelbtnHover-bc:#fb4646;
+  --cancelbtnHover:#f7f9fa;
+  --savebtn-bc:#f7f9fa;
+  --savebtn:#000000;
+  --savebtnHover-bc:#e0e4e5;
+  --noteInfoLeft:#4b4d4e;
+  --previewTags:hsl(0,0%,10%);
+  --previewbtn-bc:#1c1b1d;
+  --previewbtn:#f7f9fa;
+  --previewbtnHover-bc:#222124;
+  --previewContent:#eae8e8;
 }
 
 
@@ -79,6 +125,11 @@
   border-bottom: 1px solid var(--bottomBorder);
   padding-bottom: 10px;
   margin-bottom: 10px;
+  font-weight: 600;
+}
+.sidebar-categories p{
+  color: var(--addbtn);
+  margin:10px 0;
 }
 
 .sidebar-categories button {
@@ -90,15 +141,16 @@
   color: var(--sidebarNav);
   border-radius: 5px;
   cursor: pointer;
+  font-weight: 600;
 }
 
 .sidebar-categories .selected {
   background: var(--sidebarNavSelected-bc);
   color: var(--sidebarNavSelected);
-  font-weight: 600;
 }
 
 .nav-link {
+  font-weight: 600;
   padding: 10px;
   border: none;
   background-color: var(--sidebarNav-bc);
@@ -145,6 +197,7 @@
   display: grid;
   min-height: 100vh;
   grid-template-columns: 240px 420px 1fr;
+  background-color: var(--app-bc);
 }
 
 
@@ -163,6 +216,8 @@
 
 .main-heading {
   font-weight: 500;
+  margin-bottom:10px;
+  color: var(--addbtn);
 }
 
 .note-card {
@@ -185,15 +240,15 @@
 
 .add-note-btn {
   background-color: var(--addbtn-bc);
+  color: var(--addbtn);
   border: none;
   width: 100%;
   text-align: start;
   padding: 10px 10px;
-  margin: 5px 0;
+  margin-bottom: 15px;
   border-radius: 5px;
   font-size: 16px;
   font-weight: 600;
-  color: #111827;
   cursor: pointer;
 }
 
@@ -221,7 +276,7 @@
 }
 
 .note-card.selected .note-content {
-  color: var(--noetConetentSelected);
+  color: var(--noteContentSelected);
 }
 
 .note-card.selected .tags {
@@ -259,6 +314,7 @@
   font-weight: 600;
   text-align: center;
 }
+
 
 .tag-filter-msg button:hover {
   background-color: var(--clearbtnHover-bc);
@@ -310,6 +366,7 @@ form label {
 .note-form select {
   border: 1px solid var(--borderFormInput);
   background: var(--formInput-bc);
+  color: var(--addbtn);
   outline: none;
 }
 .note-form input:focus,
@@ -317,6 +374,9 @@ form label {
 .note-form select:focus {
   border-color: var(--borderFormInputSelected);
   background: var(--formInputSelected-bc);
+}
+.note-form-head{
+  color: var(--addbtn);
 }
 form textarea {
   line-height: 1.6;
@@ -366,6 +426,7 @@ form select {
 .form-tags {
   padding: 2px 10px;
   background-color: var(--formTags-bc);
+  color:var(--addbtn);
   border-radius: 5px;
 }
 
@@ -413,6 +474,9 @@ form select {
   align-items: center;
   margin-bottom: 20px;
 }
+.preview-title{
+  color: var(--addbtn);
+}
 .note-info{
   display: grid;
   grid-template-columns: 20% 80%;
@@ -423,6 +487,9 @@ form select {
 }
 .note-info .left{
   color: var(--noteInfoLeft);
+}
+.note-info .right{
+  color: var(--addbtn);
 }
 .preview-tags-container{
   display: flex;
@@ -444,12 +511,12 @@ form select {
   padding: 8px 14px;
   border: none;
   border-radius: 6px;
-  background-color: var(--preveiwbtn-bc);
-  color: var(--preveiwbtn);
+  background-color: var(--previewbtn-bc);
+  color: var(--previewbtn);
   cursor: pointer;
 }
 .preview-btns *:hover{
-  background-color: var(--preveiwbtnHover-bc);
+  background-color: var(--previewbtnHover-bc);
 }
 .preview-content{
   margin-top: 20px;

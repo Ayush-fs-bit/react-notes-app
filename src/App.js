@@ -161,7 +161,7 @@ function App() {
       <Sidebar onSearch={handleChangeSearch} input={searchQuery} onCategory={handleCategoryChange} counts={countsToShow} total={totalCount} activeCategory={activeCategory} onToggle={handleToggleTheme}/>
       <div className="main">
         <div className="main-header">
-          <h1 className="main-heading">{location.pathname==="/"?"My Notes":"Archive Notes"}</h1>
+          <h2 className="main-heading">{location.pathname==="/"?"My Notes":"Archive Notes"}</h2>
           <button onClick={handleAddClick} className='add-note-btn'>+ Add New Note</button>
           {selectedTag!=='all' && <div className='tag-filter-msg'>
               <p>Filtered By Tag "{selectedTag}"</p><button onClick={handleClearTags}>clear</button>
