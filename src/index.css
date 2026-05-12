@@ -578,3 +578,11 @@ form select {
 .dark .icon{
   color: white;
 }
+
+.todo-card {
+  padding: 10px 15px;
+  background-color: var(--noteCard-bc);
+  margin-bottom: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}

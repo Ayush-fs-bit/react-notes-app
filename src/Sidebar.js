@@ -1,7 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { ReactComponent as AllIcon} from "./svg/all.svg";
 import { ReactComponent as WorkIcon } from "./svg/work.svg";
-
 import {ReactComponent as StudyIcon} from "./svg/study.svg";
 import {ReactComponent as PersonalIcon} from "./svg/personal.svg";
 import {ReactComponent as IdeaIcon} from "./svg/idea.svg";
@@ -36,8 +35,7 @@ const Sidebar = ({onSearch,input,onCategory,counts,total,activeCategory,onToggle
         <button className={activeCategory==="other"?"selected":""} onClick={()=>handleCategory('other')}><OtherIcon className="icon" />Other <span>{counts.other||0}</span></button>
       </div>
       <Link className={`nav-link ${location.pathname==="/"?'selected':""}`} to="/"><NoteIcon className="icon" /> Notes</Link>
-      <p className="nav-link"><TodoIcon className="icon" />To-do</p>
-      
+      <Link className={`nav-link ${location.pathname==="/todo"?'selected':""}`} to="/todo" ><TodoIcon className="icon" /> To-do</Link>
       <Link className={`nav-link ${location.pathname==="/archive"?'selected':""}`} to="/archive" ><ArchiveIcon className="icon" /> Archive</Link>
     </div>
     <div className="bottom">
