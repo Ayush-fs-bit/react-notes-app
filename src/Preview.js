@@ -1,3 +1,8 @@
+import { ReactComponent as ArchiveIcon } from './svg/archive.svg';
+import {ReactComponent as DeleteIcon} from './svg/delete.svg';
+import {ReactComponent as EditIcon} from './svg/edit.svg';
+import {ReactComponent as UnarchiveIcon} from './svg/unarchive.svg';
+
 const Preview = ({ noteSelected, onDelete, onEdit, onArchive, onTagClick }) => {
   if (!noteSelected) {
     return <div className="preview">Select A Note</div>
@@ -14,16 +19,20 @@ const Preview = ({ noteSelected, onDelete, onEdit, onArchive, onTagClick }) => {
     }}>{t}</div>))
   }
 
+  const unarchive=<div className='previewbtn-flex'><UnarchiveIcon className="icon" /><p>Unarchive</p></div>;
+  const archive=<div className='previewbtn-flex'><ArchiveIcon className='icon'/><p>Archive</p></div>;
+
+
   return (
     <div className="preview">
       <div className="preview-header">
         <h1 className="preview-title">{noteSelected.title}</h1>
         <div className="preview-btns">
-          <button onClick={onEdit}>edit</button>
+          <button onClick={onEdit}><div className='previewbtn-flex'><EditIcon className="icon" /><p>Edit</p></div></button>
           <button onClick={onArchive}>
-            {noteSelected.isArchived === true ? "Unarchive" : "Archive"}
+            {noteSelected.isArchived === true ?unarchive:archive}
           </button>
-          <button onClick={onDelete}>Delete</button></div>
+          <button onClick={onDelete}><div className='previewbtn-flex'><DeleteIcon className="icon" /><p>Delete</p></div></button></div>
       </div>
 
       <div className="note-info">

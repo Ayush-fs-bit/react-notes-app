@@ -6,7 +6,7 @@ import Archivepage from './Archivepage';
 import Noteform from './Noteform';
 import { Routes, Route, useLocation} from 'react-router-dom';
 import { useEffect, useState } from 'react';
-
+import {ReactComponent as AddIcon} from './svg/add.svg'
 
 
 
@@ -162,7 +162,7 @@ function App() {
       <div className="main">
         <div className="main-header">
           <h2 className="main-heading">{location.pathname==="/"?"My Notes":"Archive Notes"}</h2>
-          <button onClick={handleAddClick} className='add-note-btn'>+ Add New Note</button>
+          <button onClick={handleAddClick} className='add-note-btn'><AddIcon className="icon" /> Add New Note</button>
           {selectedTag!=='all' && <div className='tag-filter-msg'>
               <p>Filtered By Tag "{selectedTag}"</p><button onClick={handleClearTags}>clear</button>
             </div>}
@@ -175,7 +175,10 @@ function App() {
       <div className='right'>
         {isAdding && <Noteform onAddNote={handleAddingNote} />}
         {isEditing && <Noteform onUpdateNote={handleUpdatedNote} noteToEdit={selectedNote} onCancel={handleCancelEdit}/>}
-        {!selectedNote && !isAdding && <p>select a note</p>}
+        {!selectedNote && !isAdding && <div className='preview-emptystate'>
+            <h2>Select A Note</h2>
+            <p>Choose a note from the list to preview,edit,archive,delete its content.</p>
+          </div>}
         {!isEditing && selectedNote && <Preview noteSelected={selectedNote} onDelete={handleDeletingNote} onEdit={handleEditingNote} onArchive={handleArchiveNote} onTagClick={handleSelectedTag}/>}
       </div>
     </div>

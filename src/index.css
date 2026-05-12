@@ -106,8 +106,16 @@
 .sidebar .bottom p {
   padding: 10px 0;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
-
+.sidebar .bottom p img{
+  margin-right: 10px;
+}
+.sidebar-flex{
+  display: flex;
+  align-items:center ;
+}
 .sidebar input {
   display: block;
   background-color: var(--searchInput-bc);
@@ -250,6 +258,11 @@
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.add-note-btn img{
+  margin-right: 5px;
 }
 
 .add-note-btn:hover {
@@ -309,12 +322,15 @@
   cursor: pointer;
   padding: 3px 10px;
   background-color:var(--clearbtn-bc);
+  color: var(--addbtn);
   border: none;
   border-radius: 5px;
   font-weight: 600;
   text-align: center;
 }
-
+.tag-filter-msg p{
+  color: var(--addbtn);
+}
 
 .tag-filter-msg button:hover {
   background-color: var(--clearbtnHover-bc);
@@ -507,15 +523,19 @@ form select {
   display: flex;
   gap: 5px;
 }
-.preview-btns *{
-  padding: 8px 14px;
+.preview-btns button{
+  padding: 5px 10px;
   border: none;
   border-radius: 6px;
   background-color: var(--previewbtn-bc);
   color: var(--previewbtn);
   cursor: pointer;
+}.preview-btns button p{
+  font-weight: 600;
 }
-.preview-btns *:hover{
+   
+
+.preview-btns button:hover{
   background-color: var(--previewbtnHover-bc);
 }
 .preview-content{
@@ -524,6 +544,37 @@ form select {
   color: var(--previewContent);
 }
 
+.preview-emptystate *{
+  color: var(--addbtn);
+  width: 300px;
+  line-height: 1.7;
+}
+.preview-emptystate{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+  text-align: center;
+}
 
+.svg-flex{
+  display: flex;
+  align-items: center;
+} 
 
+.nav-link img{
+  margin-right: 50px;
+}
 
+.previewbtn-flex{
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.icon{
+  color:black ;
+}
+.dark .icon{
+  color: white;
+}
