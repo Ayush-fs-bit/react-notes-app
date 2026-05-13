@@ -5,6 +5,7 @@ import Preview from './Preview';
 import Archivepage from './Archivepage';
 import Noteform from './Noteform';
 import Todo from './Todo'
+import Previewtodo from './Previewtodo';
 import Todoform from './Todoform'
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -21,38 +22,42 @@ function App() {
     return saved ? JSON.parse(saved) : [];
   })
 
-  const todoLists = [
-    {
-      id: 1,
-      title: "College Tasks",
-      todos: [
-        {
-          id: 101,
-          text: "Complete assignment",
-          completed: false
-        },
-        {
-          id: 102,
-          text: "Study DSA",
-          completed: true
-        }
-      ]
-    },
+  const [todoLists, setTodoLists] = useState(() => {
+    const saved = localStorage.getItem('todoLists');
+    return saved ? JSON.parse(saved) : [
+      {
+        id: 1,
+        title: "College Tasks",
+        todos: [
+          {
+            id: 101,
+            text: "Complete assignment",
+            completed: false
+          },
+          {
+            id: 102,
+            text: "Study DSA",
+            completed: true
+          }
+        ]
+      },
 
-    {
-      id: 2,
-      title: "Shopping",
-      todos: [
-        {
-          id: 201,
-          text: "Buy milk",
-          completed: false
-        }
-      ]
-    }
-  ]
+      {
+        id: 2,
+        title: "Shopping",
+        todos: [
+          {
+            id: 201,
+            text: "Buy milk",
+            completed: false
+          }
+        ]
+      }
+    ]
+  });
 
   const [selectedNote, setSelectedNote] = useState(null);
+  const [selectedTodoId, setSelectedTodoId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -63,14 +68,28 @@ function App() {
     return theme ? JSON.parse(theme) : "light";
   });
   const location = useLocation();
+  const selectedTodo = todoLists.find((t) => t.id === selectedTodoId);
 
   useEffect(() => {
     localStorage.setItem('theme', JSON.stringify(activeTheme));
   }, [activeTheme]);
 
   useEffect(() => {
+    if (location.pathname !== "/todo") {
+      setSelectedTodoId(null);
+    }
+    if (location.pathname === "/todo") {
+      setSelectedNote(null);
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
   }, [notes]);
+
+  useEffect(() => {
+    localStorage.setItem('todoLists', JSON.stringify(todoLists));
+  }, [todoLists]);
 
   const baseFilteredNotes = notes.filter((n) => {
     const searchFilter = n.title.toLowerCase().includes(searchQuery.toLowerCase()) || n.content.toLowerCase().includes(searchQuery.toLowerCase());
@@ -113,6 +132,7 @@ function App() {
     setSelectedNote(note);
     setIsAdding(false);
     setIsEditing(false);
+    setSelectedTodoId(null);
   }
 
   function handleAddClick() {
@@ -189,6 +209,26 @@ function App() {
     setActiveTheme(prev => prev === "light" ? "dark" : "light")
   }
 
+  function handleSelectedTodo(id) {
+    let todo = todoLists.find((t) => t.id === id);
+    setSelectedTodoId(todo.id);
+    setIsAdding(false);
+    setIsEditing(false);
+    setSelectedNote(null);
+  }
+
+  function handleCheckToogle(id) {
+    setTodoLists((prev) => {
+      return prev.map((list) => (
+        {
+          ...list, todos: list.todos.map((todo) => (
+            todo.id === id ? { ...todo, completed: !todo.completed } : todo
+          ))
+        }
+      ))
+    })
+  }
+
   return (
     <div id="App" className={activeTheme === 'dark' ? 'dark' : ""}>
       <Sidebar onSearch={handleChangeSearch} input={searchQuery} onCategory={handleCategoryChange} counts={countsToShow} total={totalCount} activeCategory={activeCategory} onToggle={handleToggleTheme} />
@@ -205,18 +245,19 @@ function App() {
         <Routes>
           <Route path="/" element={<Homepage notes={homeNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag} selectedNote={selectedNote} />} />
           <Route path="/archive" element={<Archivepage notes={archivedNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag} selectedNote={selectedNote} />} />
-          <Route path="/todo" element={<Todo todoList={todoLists} />} />
+          <Route path="/todo" element={<Todo todoList={todoLists} onSelect={handleSelectedTodo} />} />
         </Routes>
       </div>
       <div className='right'>
         {isAdding && location.pathname !== "/todo" && <Noteform onAddNote={handleAddingNote} />}
         {isEditing && <Noteform onUpdateNote={handleUpdatedNote} noteToEdit={selectedNote} onCancel={handleCancelEdit} />}
-        {!selectedNote && !isAdding && <div className='preview-emptystate'>
+        {!selectedNote && !isAdding && !selectedTodo && <div className='preview-emptystate'>
           <h2>Select A Note</h2>
           <p>Choose a note from the list to preview,edit,archive,delete its content.</p>
         </div>}
         {!isEditing && selectedNote && <Preview noteSelected={selectedNote} onDelete={handleDeletingNote} onEdit={handleEditingNote} onArchive={handleArchiveNote} onTagClick={handleSelectedTag} />}
         {isAdding && location.pathname === "/todo" && <Todoform />}
+        {!isEditing && selectedTodo && !isAdding && <Previewtodo selectedTodo={selectedTodo} onChecked={handleCheckToogle} />}
       </div>
     </div>
 
