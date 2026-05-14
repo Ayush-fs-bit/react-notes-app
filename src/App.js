@@ -153,6 +153,13 @@ function App() {
     setIsEditing(false);
   }
 
+  function handleAddingTodo(newTodo){
+    setTodoLists((prev) => [newTodo, ...prev]);
+    setSelectedTodoId(newTodo.id);
+    setIsAdding(false);
+    setIsEditing(false);
+  }
+
   function handleDeletingNote() {
     if (!selectedNote) return;
     if (!window.confirm("Delete this note")) return;
@@ -161,7 +168,7 @@ function App() {
     setSelectedNote(null);
   }
 
-  function handleEditingNote() {
+  function handleEditing() {
     setIsEditing(true);
     setIsAdding(false);
   }
@@ -171,6 +178,14 @@ function App() {
       prev.map((n) => (n.id === updatedNote.id ? updatedNote : n))
     )
     setSelectedNote(updatedNote);
+    setIsEditing(false);
+  }
+
+  function handleUpdatedTodo(updatedTodo){
+    setTodoLists((prev) =>
+      prev.map((t) => (t.id === updatedTodo.id ? updatedTodo : t))
+    )
+    setSelectedTodoId(updatedTodo.id);
     setIsEditing(false);
   }
 
@@ -193,6 +208,8 @@ function App() {
     )
     setSelectedNote(null);
   }
+
+  
 
   function handleSelectedTag(tag) {
     setSelectedTag(tag);
@@ -250,14 +267,15 @@ function App() {
       </div>
       <div className='right'>
         {isAdding && location.pathname !== "/todo" && <Noteform onAddNote={handleAddingNote} />}
-        {isEditing && <Noteform onUpdateNote={handleUpdatedNote} noteToEdit={selectedNote} onCancel={handleCancelEdit} />}
+        {isEditing && location.pathname !== "/todo" && <Noteform onUpdateNote={handleUpdatedNote} noteToEdit={selectedNote} onCancel={handleCancelEdit} />}
         {!selectedNote && !isAdding && !selectedTodo && <div className='preview-emptystate'>
           <h2>Select A Note</h2>
           <p>Choose a note from the list to preview,edit,archive,delete its content.</p>
         </div>}
-        {!isEditing && selectedNote && <Preview noteSelected={selectedNote} onDelete={handleDeletingNote} onEdit={handleEditingNote} onArchive={handleArchiveNote} onTagClick={handleSelectedTag} />}
-        {isAdding && location.pathname === "/todo" && <Todoform />}
-        {!isEditing && selectedTodo && !isAdding && <Previewtodo selectedTodo={selectedTodo} onChecked={handleCheckToogle} />}
+        {!isEditing && selectedNote && <Preview noteSelected={selectedNote} onDelete={handleDeletingNote} onEdit={handleEditing} onArchive={handleArchiveNote} onTagClick={handleSelectedTag} />}
+        {isAdding && location.pathname === "/todo" && <Todoform onAddTodo={handleAddingTodo}/>}
+        {isEditing && location.pathname === "/todo" && <Todoform todoToEdit={selectedTodo} onCancel={handleCancelEdit} onUpdateTodo={handleUpdatedTodo}/>}
+        {!isEditing && selectedTodo && !isAdding && <Previewtodo selectedTodo={selectedTodo} onChecked={handleCheckToogle} onEdit={handleEditing}/>}
       </div>
     </div>
 

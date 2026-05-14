@@ -1,4 +1,4 @@
-const Previewtodo = ({selectedTodo,onChecked}) => {
+const Previewtodo = ({selectedTodo,onChecked,onEdit}) => {
   
   return ( <div>
     <p>{selectedTodo.title}</p>
@@ -10,6 +10,9 @@ const Previewtodo = ({selectedTodo,onChecked}) => {
         </div>
       })}
     </div>
+
+    <button onClick={onEdit}>Edit</button>
+         
   </div> );
 }
  
