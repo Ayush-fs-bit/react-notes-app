@@ -1,4 +1,4 @@
-const Previewtodo = ({selectedTodo,onChecked,onEdit}) => {
+const Previewtodo = ({selectedTodo,onChecked,onEdit,onDelete,onArchive}) => {
   
   return ( <div>
     <p>{selectedTodo.title}</p>
@@ -12,6 +12,10 @@ const Previewtodo = ({selectedTodo,onChecked,onEdit}) => {
     </div>
 
     <button onClick={onEdit}>Edit</button>
+    <button onClick={onDelete}>delete</button>
+    <button onClick={onArchive}>
+            {selectedTodo.isArchived === true ?'unarchive':'archive'}
+    </button>
          
   </div> );
 }

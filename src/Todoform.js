@@ -98,7 +98,7 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo}) => {
               <input type="text" placeholder="Add todos..." id="todoInput" value={todosInput} onChange={(e) => setTodosInput(e.target.value.trim())} />
               <button type="button" onClick={handleTodosAddition}>Add</button></div>
             <div className="added-todo">
-              {todos.map((t) => {
+              {todos?.map((t) => {
                 return <span className="form-todo" key={t.id}>{t.text}<button type="button" onClick={()=>handleDeleteTodo(t.id)}>delete</button></span>
               })}
             </div>
@@ -122,7 +122,7 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo}) => {
               <input type="text" placeholder="Add tag..." id="tagInput" value={tagsInput} onChange={(e) => setTagsInput(e.target.value.trim())} />
               <button type="button" onClick={handleTagAddition}>Add</button></div>
             <div className="added-tags">
-              {tags.map((t) => {
+              {tags?.map((t) => {
                 return <span className="form-tags" key={t}>{t}</span>
               })}
             </div>

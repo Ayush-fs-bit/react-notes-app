@@ -37,6 +37,8 @@ const Sidebar = ({onSearch,input,onCategory,counts,total,activeCategory,onToggle
       <Link className={`nav-link ${location.pathname==="/"?'selected':""}`} to="/"><NoteIcon className="icon" /> Notes</Link>
       <Link className={`nav-link ${location.pathname==="/todo"?'selected':""}`} to="/todo" ><TodoIcon className="icon" /> To-do</Link>
       <Link className={`nav-link ${location.pathname==="/archive"?'selected':""}`} to="/archive" ><ArchiveIcon className="icon" /> Archive</Link>
+      <Link className={`nav-link ${location.pathname==="/archivetodo"?'selected':""}`} to="/archivetodo" ><ArchiveIcon className="icon" /> Archive Todos</Link>
+
     </div>
     <div className="bottom">
       <p><SettingIcon className="icon" />setting</p>

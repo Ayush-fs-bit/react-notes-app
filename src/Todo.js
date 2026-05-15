@@ -1,4 +1,13 @@
-const Todo = ({todoList,onSelect}) => {
+const Todo = ({todoList,onSelect,onTagClick}) => {
+
+  function renderTags(tags){
+    if(!tags||tags.length===0)return;
+    return tags.map((t)=>(<div className="tags" key={t} onClick={(e)=>{e.stopPropagation();
+      handleTagClick(t)}}>{t}</div>))
+  }
+  function handleTagClick(selectedTag){
+    onTagClick(selectedTag);
+  }
   return (<div className="todo-container">
       {todoList.map((t) => {
         const totalTask = t.todos.length;
@@ -7,6 +16,7 @@ const Todo = ({todoList,onSelect}) => {
           <div className="todo-card" key={t.id} onClick={()=>onSelect(t.id)}>
             <p>{t.title}</p>
             <p>{completedTask} / {totalTask}  Completed</p>
+            <div className="tags-container">{renderTags(t.tags)}</div>
           </div>
         );
       })}

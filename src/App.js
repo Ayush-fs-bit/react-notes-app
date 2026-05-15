@@ -7,6 +7,7 @@ import Noteform from './Noteform';
 import Todo from './Todo'
 import Previewtodo from './Previewtodo';
 import Todoform from './Todoform'
+import Archivetodo from './Archivetodo'
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ReactComponent as AddIcon } from './svg/add.svg'
@@ -105,8 +106,8 @@ function App() {
     return categoryFilter;
   })
 
-  const homeNotes = filteredNotes.filter((n) => !n.isArchived)
-  const archivedNotes = filteredNotes.filter((n) => n.isArchived)
+  const homeNotes = filteredNotes.filter((n) => !n.isArchived);
+  const archivedNotes = filteredNotes.filter((n) => n.isArchived);
 
   const homeNotesCategoryCount = baseFilteredNotes.filter((n) => !n.isArchived).reduce((acc, note) => {
     const cat = note.category || 'other';
@@ -120,12 +121,45 @@ function App() {
     return acc;
   }, {})
 
-  const countsToShow = location.pathname === "/archive" ? archiveNotesCategoryCount : homeNotesCategoryCount;
 
-  const totalArchiveNotes = archivedNotes.length;
-  const totalHomeNotes = homeNotes.length;
+  const totalArchiveNotes =  baseFilteredNotes.filter((n) => n.isArchived).length;
+  const totalHomeNotes =   baseFilteredNotes.filter((n) => !n.isArchived).length;
 
-  const totalCount = location.pathname === "/archive" ? totalArchiveNotes : totalHomeNotes;
+
+  const baseFilteredTodos = todoLists.filter((t) => {
+    const searchFilter = t.title.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const tagFilter = selectedTag === "all" || t.tags?.includes(selectedTag);
+
+    return searchFilter && tagFilter;
+  });
+
+  const filteredTodos = baseFilteredTodos.filter((t) => {
+    const categoryFilter = activeCategory === 'all' || t.category === activeCategory;
+    return categoryFilter;
+  })
+
+  const homeTodos = filteredTodos.filter((t) => !t.isArchived);
+  const archivedTodos = filteredTodos.filter((t) => t.isArchived);
+
+  const homeTodosCategoryCount = baseFilteredTodos.filter((t) => !t.isArchived).reduce((acc, todo) => {
+    const cat = todo.category || 'other'
+    acc[cat] = (acc[cat] || 0) + 1;
+    return acc;
+  }, {})
+
+  const archiveTodosCategoryCount = baseFilteredTodos.filter((t) => t.isArchived).reduce((acc, todo) => {
+    const cat = todo.category || 'other';
+    acc[cat] = (acc[cat] || 0) + 1;
+    return acc;
+  }, {})
+
+  const countsToShow = location.pathname === "/archive" || location.pathname === "/" ? location.pathname === "/archive" ? archiveNotesCategoryCount : homeNotesCategoryCount : location.pathname === "/archivetodo" ? archiveTodosCategoryCount : homeTodosCategoryCount;
+
+  const totalArchiveTodos = baseFilteredTodos.filter((t) => t.isArchived).length;
+  const totalHomeTodos = baseFilteredTodos.filter((t) => !t.isArchived).length;
+
+  const totalCount = location.pathname === "/archive" || location.pathname === "/" ? location.pathname === "/archive" ? totalArchiveNotes : totalHomeNotes : location.pathname === "/archivetodo" ? totalArchiveTodos : totalHomeTodos;
 
   function handleSelectNote(id) {
     let note = notes.find((n) => n.id === id);
@@ -153,7 +187,7 @@ function App() {
     setIsEditing(false);
   }
 
-  function handleAddingTodo(newTodo){
+  function handleAddingTodo(newTodo) {
     setTodoLists((prev) => [newTodo, ...prev]);
     setSelectedTodoId(newTodo.id);
     setIsAdding(false);
@@ -162,10 +196,19 @@ function App() {
 
   function handleDeletingNote() {
     if (!selectedNote) return;
-    if (!window.confirm("Delete this note")) return;
+    if (!window.confirm("Delete This Note")) return;
     const remainingNotes = notes.filter((n) => n.id !== selectedNote.id);
     setNotes(remainingNotes);
     setSelectedNote(null);
+  }
+
+  function handleDeletingTodo() {
+    if (!selectedTodoId) return;
+    if (!window.confirm("Delete This Todo")) return;
+    const remainingTodos = todoLists.filter((t) => t.id !== selectedTodoId);
+    setTodoLists(remainingTodos);
+    setSelectedTodoId(null);
+
   }
 
   function handleEditing() {
@@ -181,7 +224,7 @@ function App() {
     setIsEditing(false);
   }
 
-  function handleUpdatedTodo(updatedTodo){
+  function handleUpdatedTodo(updatedTodo) {
     setTodoLists((prev) =>
       prev.map((t) => (t.id === updatedTodo.id ? updatedTodo : t))
     )
@@ -209,7 +252,18 @@ function App() {
     setSelectedNote(null);
   }
 
-  
+  function handleArchiveTodo() {
+    setTodoLists((prev) =>
+      prev.map((t) => (
+        t.id === selectedTodo.id
+          ? { ...t, isArchived: !t.isArchived }
+          : t
+      ))
+    )
+    setSelectedTodoId(null);
+  }
+
+
 
   function handleSelectedTag(tag) {
     setSelectedTag(tag);
@@ -252,7 +306,9 @@ function App() {
       <div className="main">
         <div className="main-header">
           <h2 className="main-heading">
-            {location.pathname === "/" ? "My Notes" : location.pathname === "/archive" ? "Archive Notes" : "Todo List"}
+            {location.pathname === "/" ? "My Notes" : location.pathname === "/archive" ? (location.pathname === "/archivetodo"
+              ? "Archived Todos"
+              : "Todo Lists") : "Todo List"}
           </h2>
           <button onClick={handleAddClick} className='add-note-btn'><AddIcon className="icon" /> {location.pathname === '/todo' ? "Add Todo" : "Add New Note"}</button>
           {selectedTag !== 'all' && <div className='tag-filter-msg'>
@@ -262,20 +318,21 @@ function App() {
         <Routes>
           <Route path="/" element={<Homepage notes={homeNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag} selectedNote={selectedNote} />} />
           <Route path="/archive" element={<Archivepage notes={archivedNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag} selectedNote={selectedNote} />} />
-          <Route path="/todo" element={<Todo todoList={todoLists} onSelect={handleSelectedTodo} />} />
+          <Route path="/archivetodo" element={<Archivetodo todos={archivedTodos} onSelectTodo={handleSelectedTodo} onTagClick={handleSelectedTag} selectedTodo={selectedTodo} />} />
+          <Route path="/todo" element={<Todo todoList={homeTodos} onSelect={handleSelectedTodo} onTagClick={handleSelectedTag} />} />
         </Routes>
       </div>
       <div className='right'>
-        {isAdding && location.pathname !== "/todo" && <Noteform onAddNote={handleAddingNote} />}
-        {isEditing && location.pathname !== "/todo" && <Noteform onUpdateNote={handleUpdatedNote} noteToEdit={selectedNote} onCancel={handleCancelEdit} />}
+        {isAdding && (location.pathname === "/" || location.pathname === "/archive") && <Noteform onAddNote={handleAddingNote} />}
+        {isEditing && (location.pathname === "/" || location.pathname === "/archive") && <Noteform onUpdateNote={handleUpdatedNote} noteToEdit={selectedNote} onCancel={handleCancelEdit} />}
         {!selectedNote && !isAdding && !selectedTodo && <div className='preview-emptystate'>
           <h2>Select A Note</h2>
           <p>Choose a note from the list to preview,edit,archive,delete its content.</p>
         </div>}
         {!isEditing && selectedNote && <Preview noteSelected={selectedNote} onDelete={handleDeletingNote} onEdit={handleEditing} onArchive={handleArchiveNote} onTagClick={handleSelectedTag} />}
-        {isAdding && location.pathname === "/todo" && <Todoform onAddTodo={handleAddingTodo}/>}
-        {isEditing && location.pathname === "/todo" && <Todoform todoToEdit={selectedTodo} onCancel={handleCancelEdit} onUpdateTodo={handleUpdatedTodo}/>}
-        {!isEditing && selectedTodo && !isAdding && <Previewtodo selectedTodo={selectedTodo} onChecked={handleCheckToogle} onEdit={handleEditing}/>}
+        {isAdding && location.pathname === "/todo" && <Todoform onAddTodo={handleAddingTodo} />}
+        {isEditing && location.pathname === "/todo" && <Todoform todoToEdit={selectedTodo} onCancel={handleCancelEdit} onUpdateTodo={handleUpdatedTodo} />}
+        {!isEditing && selectedTodo && !isAdding && <Previewtodo selectedTodo={selectedTodo} onChecked={handleCheckToogle} onDelete={handleDeletingTodo} onEdit={handleEditing} onArchive={handleArchiveTodo} />}
       </div>
     </div>
 
