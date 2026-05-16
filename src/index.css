@@ -344,6 +344,7 @@ body{
   width: 200px;
   margin: 0 auto;
   text-align: center;
+  color:var(--addbtn);
 }
 
 .note-form {
@@ -587,5 +588,59 @@ form select {
   background-color: var(--noteCard-bc);
   margin-bottom: 5px;
   border-radius: 5px;
+  cursor: pointer;
+}
+
+.todo-card.selected {
+  background-color: var(--noteCardSelected-bc);
+}
+.todo-card p{
+  color: var(--noteTitle);
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+.todo-card.selected p{
+  color: var(--noteTitleSelected);
+}
+
+.todo-card.selected .tags {
+  background-color: var(--noteTagsSelected-bc);
+  color: var(--noteTagsSelected);
+}
+.sidebar-categories button .icon,.nav-link .icon{
+  color: var(--sidebarNav);
+}
+.sidebar-categories button.selected .icon,.nav-link.selected .icon{
+  color: var(--addbtn);
+}
+.nav-link .icon{
+  margin-right: 10px;
+}
+
+
+.preview-todo{
+  background-color:var(--noteCardSelected-bc);
+  height: 30px;
+  border-radius: 5px;
+  margin: 5px 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border: 1px solid var(--bottomBorder);
+  cursor: pointer;
+}
+.preview-todo input{
+  border: 1px solid var(--bottomBorder);
+  border-radius: 2px;
+  width: 15px;
+  height: 15px;
+  margin-right: 20px;
+  cursor: pointer;
+} 
+
+.preview-todo label{
+  color: var(--addbtn);
+  font-weight: 600;
   cursor: pointer;
 }

@@ -1,4 +1,4 @@
-const Todo = ({todoList,onSelect,onTagClick}) => {
+const Todo = ({todoList,onSelect,onTagClick,selectedTodo}) => {
 
   function renderTags(tags){
     if(!tags||tags.length===0)return;
@@ -13,7 +13,7 @@ const Todo = ({todoList,onSelect,onTagClick}) => {
         const totalTask = t.todos.length;
         const completedTask = t.todos.filter((task) => task.completed).length;
         return (
-          <div className="todo-card" key={t.id} onClick={()=>onSelect(t.id)}>
+          <div className={`todo-card ${selectedTodo?.id===t.id?"selected":""}`} key={t.id} onClick={()=>onSelect(t.id)}>
             <p>{t.title}</p>
             <p>{completedTask} / {totalTask}  Completed</p>
             <div className="tags-container">{renderTags(t.tags)}</div>

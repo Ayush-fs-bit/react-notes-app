@@ -9,7 +9,7 @@ import Previewtodo from './Previewtodo';
 import Todoform from './Todoform'
 import Archivetodo from './Archivetodo'
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import {  useEffect, useState } from 'react';
 import { ReactComponent as AddIcon } from './svg/add.svg'
 
 
@@ -302,7 +302,13 @@ function App() {
 
   return (
     <div id="App" className={activeTheme === 'dark' ? 'dark' : ""}>
+
+      
       <Sidebar onSearch={handleChangeSearch} input={searchQuery} onCategory={handleCategoryChange} counts={countsToShow} total={totalCount} activeCategory={activeCategory} onToggle={handleToggleTheme} />
+
+
+
+
       <div className="main">
         <div className="main-header">
           <h2 className="main-heading">
@@ -310,7 +316,7 @@ function App() {
               ? "Archived Todos"
               : "Todo Lists") : "Todo List"}
           </h2>
-          <button onClick={handleAddClick} className='add-note-btn'><AddIcon className="icon" /> {location.pathname === '/todo' ? "Add Todo" : "Add New Note"}</button>
+          <button onClick={handleAddClick} className='add-note-btn'><AddIcon className="icon" /> {(location.pathname === '/todo'||location.pathname==='/archivetodo' )? "Add Todo" : "Add New Note"}</button>
           {selectedTag !== 'all' && <div className='tag-filter-msg'>
             <p>Filtered By Tag "{selectedTag}"</p><button onClick={handleClearTags}>clear</button>
           </div>}
@@ -319,9 +325,12 @@ function App() {
           <Route path="/" element={<Homepage notes={homeNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag} selectedNote={selectedNote} />} />
           <Route path="/archive" element={<Archivepage notes={archivedNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag} selectedNote={selectedNote} />} />
           <Route path="/archivetodo" element={<Archivetodo todos={archivedTodos} onSelectTodo={handleSelectedTodo} onTagClick={handleSelectedTag} selectedTodo={selectedTodo} />} />
-          <Route path="/todo" element={<Todo todoList={homeTodos} onSelect={handleSelectedTodo} onTagClick={handleSelectedTag} />} />
+          <Route path="/todo" element={<Todo todoList={homeTodos} onSelect={handleSelectedTodo} onTagClick={handleSelectedTag} selectedTodo={selectedTodo}/>} />
         </Routes>
       </div>
+
+
+
       <div className='right'>
         {isAdding && (location.pathname === "/" || location.pathname === "/archive") && <Noteform onAddNote={handleAddingNote} />}
         {isEditing && (location.pathname === "/" || location.pathname === "/archive") && <Noteform onUpdateNote={handleUpdatedNote} noteToEdit={selectedNote} onCancel={handleCancelEdit} />}
@@ -332,7 +341,7 @@ function App() {
         {!isEditing && selectedNote && <Preview noteSelected={selectedNote} onDelete={handleDeletingNote} onEdit={handleEditing} onArchive={handleArchiveNote} onTagClick={handleSelectedTag} />}
         {isAdding && location.pathname === "/todo" && <Todoform onAddTodo={handleAddingTodo} />}
         {isEditing && location.pathname === "/todo" && <Todoform todoToEdit={selectedTodo} onCancel={handleCancelEdit} onUpdateTodo={handleUpdatedTodo} />}
-        {!isEditing && selectedTodo && !isAdding && <Previewtodo selectedTodo={selectedTodo} onChecked={handleCheckToogle} onDelete={handleDeletingTodo} onEdit={handleEditing} onArchive={handleArchiveTodo} />}
+        {!isEditing && selectedTodo && !isAdding && <Previewtodo selectedTodo={selectedTodo} onChecked={handleCheckToogle} onDelete={handleDeletingTodo} onEdit={handleEditing} onArchive={handleArchiveTodo} onTagClick={handleSelectedTag}/>}
       </div>
     </div>
 

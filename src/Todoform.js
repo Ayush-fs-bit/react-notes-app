@@ -15,10 +15,12 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo}) => {
     if (todoToEdit) {
       setTitle(todoToEdit.title);
       setCategory(todoToEdit.category);
-      setTags(todoToEdit.tags)
+      setTags(todoToEdit.tags||[])
       setTodos(todoToEdit.todos || []);
     }
   }, [todoToEdit]);
+
+
 
 
   function handleSubmit() {
@@ -59,7 +61,7 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo}) => {
 
   function handleTagAddition() {
     if (!tagsInput) return;
-
+    
     setTags((prev) => [...prev, tagsInput]);
     setTagsInput('');
   }
@@ -135,7 +137,6 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo}) => {
           <button type="submit" className="save-btn">Save</button>
         </div>
       </form>
-
     </div>);
 }
 
