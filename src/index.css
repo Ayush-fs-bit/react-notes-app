@@ -44,6 +44,7 @@
   --previewbtn:#374151;
   --previewbtnHover-bc:#E5E7EB;
   --previewContent:#474747;
+  --scrollbar:rgb(183, 181, 181);
 }
 .dark{
   --app-bc:#000000;
@@ -91,6 +92,7 @@
   --previewbtn:#f7f9fa;
   --previewbtnHover-bc:#222124;
   --previewContent:#eae8e8;
+  --scrollbar:hsl(0, 0%, 20%);
 }
 
 
@@ -347,29 +349,30 @@ body{
   color:var(--addbtn);
 }
 
-.note-form {
+.note-form,.todo-form{
   padding: 25px;
   position: relative;
   width: 100%;
   height: 100%;
 }
 
-.note-form-head p {
+.note-form-head p,.todo-form-head p{
   color: var(--noteFromSecoundarytext);
 }
 
-.note-form header {
+.note-form header,.todo-form header{
   border-bottom: 1px solid var(--bottomBorder);
   padding-bottom: 10px;
 }
 
-form label {
+form label,.todo-form label{
   margin-top: 10px;
   display: block;
   padding: 5px 0;
+  color: var(--addbtn);
 }
 
-#formTitle {
+#formTitle,#todoFormTitle,.form-todo-input-task input{
   width: 100%;
   padding: 5px 8px;
   margin-bottom: 10px;
@@ -383,7 +386,9 @@ form label {
 }
 .note-form input,
 .note-form textarea,
-.note-form select {
+.note-form select,
+.todo-form input,
+.todo-form select{
   border: 1px solid var(--borderFormInput);
   background: var(--formInput-bc);
   color: var(--addbtn);
@@ -391,13 +396,57 @@ form label {
 }
 .note-form input:focus,
 .note-form textarea:focus,
-.note-form select:focus {
+.note-form select:focus,
+.todo-form input:focus,
+.todo-form select:focus {
   border-color: var(--borderFormInputSelected);
   background: var(--formInputSelected-bc);
 }
-.note-form-head{
+.note-form-head,.todo-form-head{
   color: var(--addbtn);
 }
+.form-todo-input-task{
+  display: grid;
+  grid-template-columns: 80% 20%;
+}
+.form-todo-input-task button{
+  width: 100%;
+  padding: 5px 8px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: var(--tagsAddbtn-bc);
+  color: var(--tagsAddbtn);
+}
+
+.added-todo{
+  width: 100%;
+  height: 200px;
+  overflow: auto;
+}
+
+.form-todo{
+  display: flex;
+  justify-content: space-between;
+  background-color:var(--noteCardSelected-bc);
+  border: 1px solid var(--bottomBorder);
+  height: 30px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  padding-left: 5px;
+  align-items: center;
+}
+.form-todo p{
+  color:var(--addbtn);
+}
+.form-todo button{
+  background-color: var(--cancelbtnHover-bc);
+  border: none;
+  border-radius: 5px;
+  padding: 3px;
+  cursor: pointer;
+}
+
 form textarea {
   line-height: 1.6;
   width: 100%;
@@ -450,7 +499,7 @@ form select {
   border-radius: 5px;
 }
 
-.form-buttons {
+.form-buttons,.todo-form-buttons{
   position: absolute;
   bottom: 30px;
   right: 20px;
@@ -643,4 +692,23 @@ form select {
   color: var(--addbtn);
   font-weight: 600;
   cursor: pointer;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--app-bc);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
+
+.todo-checkbox-container{
+  overflow: auto;
 }

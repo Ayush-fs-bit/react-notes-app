@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import {ReactComponent as DeleteIcon} from './svg/deletetodo.svg';
 
 const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo}) => {
   const [category, setCategory] = useState('other');
@@ -97,13 +98,15 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo}) => {
 
         <div className="form-todos-container">
               <label htmlFor="todoInput">Tasks</label>
+              <div className="form-todo-input-task">
               <input type="text" placeholder="Add todos..." id="todoInput" value={todosInput} onChange={(e) => setTodosInput(e.target.value.trim())} />
               <button type="button" onClick={handleTodosAddition}>Add</button></div>
-            <div className="added-todo">
+        </div>
+        <div className="added-todo">
               {todos?.map((t) => {
-                return <span className="form-todo" key={t.id}>{t.text}<button type="button" onClick={()=>handleDeleteTodo(t.id)}>delete</button></span>
+                return <div className="form-todo" key={t.id}><p>{t.text}</p><button type="button" onClick={()=>handleDeleteTodo(t.id)}><DeleteIcon/></button></div>
               })}
-            </div>
+        </div>
             
 
         <div className="form-partesian">
@@ -132,7 +135,7 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo}) => {
         </div>
 
 
-        <div className="Todo-form-buttons">
+        <div className="todo-form-buttons">
           <button type="button" onClick={handleCancel} className="cancel-btn">Cancel</button>
           <button type="submit" className="save-btn">Save</button>
         </div>

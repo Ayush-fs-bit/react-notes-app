@@ -56,7 +56,7 @@ const Previewtodo = ({selectedTodo,onChecked,onEdit,onDelete,onArchive,onTagClic
     <div className="todo-checkbox-container">
       {selectedTodo.todos.map((o)=>{
         return <div className='preview-todo' onClick={()=>onChecked(o.id)}>
-          <input type="checkbox" id={o.id} onChange={()=>onChecked(o.id)} checked={o.completed}/>
+          <input type="checkbox" id={o.id}  checked={o.completed}/>
           <label htmlFor={o.id}>{o.text}</label>
         </div>
       })}
