@@ -3,7 +3,7 @@ import {ReactComponent as DeleteIcon} from './svg/delete.svg';
 import {ReactComponent as EditIcon} from './svg/edit.svg';
 import {ReactComponent as UnarchiveIcon} from './svg/unarchive.svg';
 
-const Previewtodo = ({selectedTodo,onChecked,onEdit,onDelete,onArchive,onTagClick}) => {
+const Previewtodo = ({selectedTodo,onChecked,onEdit,onDelete,onArchive,onTagClick,onBack}) => {
   if (!selectedTodo) {
     return <div className="preview">Select A Todo</div>
   }
@@ -24,6 +24,7 @@ const Previewtodo = ({selectedTodo,onChecked,onEdit,onDelete,onArchive,onTagClic
   const archive=<div className='previewbtn-flex'><ArchiveIcon className='icon'/><p>Archive</p></div>;
 
   return ( <div className="preview">
+    <button className="desktop-hidden back-btn" onClick={onBack}>Back</button>
     <div className="preview-header">
         <h1 className="preview-title">{selectedTodo.title}</h1>
         <div className="preview-btns">

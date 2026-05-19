@@ -14,8 +14,8 @@ const Todo = ({todoList,onSelect,onTagClick,selectedTodo}) => {
         const completedTask = t.todos.filter((task) => task.completed).length;
         return (
           <div className={`todo-card ${selectedTodo?.id===t.id?"selected":""}`} key={t.id} onClick={()=>onSelect(t.id)}>
-            <p>{t.title}</p>
-            <p>{completedTask} / {totalTask}  Completed</p>
+            <p className="todo-title">{t.title}</p>
+            <p className="todo-completed">{completedTask} / {totalTask}  Completed</p>
             <div className="tags-container">{renderTags(t.tags)}</div>
           </div>
         );

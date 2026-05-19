@@ -23,7 +23,7 @@ const Archivepage = ({todos,onSelectTodo,onTagClick,selectedTodo}) => {
       const completedTask = todo.todos.filter((task) => task.completed).length;
       return <div className={`todo-card ${selectedTodo?.id===todo.id?"selected":""}`}  onClick={()=>onSelectTodo(todo.id)} key={todo.id}>
         <p className="todo-title">{todo.title}</p>
-        <p>{completedTask} / {totalTask}  Completed</p>
+        <p className="todo-completed">{completedTask} / {totalTask}  Completed</p>
         <div className="tags-container">{renderTags(todo.tags)}</div>
       </div>
   })

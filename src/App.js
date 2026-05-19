@@ -9,7 +9,7 @@ import Previewtodo from './Previewtodo';
 import Todoform from './Todoform'
 import Archivetodo from './Archivetodo'
 import { Routes, Route, useLocation } from 'react-router-dom';
-import {  useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ReactComponent as AddIcon } from './svg/add.svg'
 
 
@@ -70,6 +70,15 @@ function App() {
   });
   const location = useLocation();
   const selectedTodo = todoLists.find((t) => t.id === selectedTodoId);
+  const [mobilePanel, setMobilePanel] = useState("home");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const titles = {
+    "/": "My Notes",
+    "/archive": "Archive Notes",
+    "/archivetodo": "Archived Todos",
+  };
+  const title = titles[location.pathname] || "Todo Lists";
 
   useEffect(() => {
     localStorage.setItem('theme', JSON.stringify(activeTheme));
@@ -122,8 +131,8 @@ function App() {
   }, {})
 
 
-  const totalArchiveNotes =  baseFilteredNotes.filter((n) => n.isArchived).length;
-  const totalHomeNotes =   baseFilteredNotes.filter((n) => !n.isArchived).length;
+  const totalArchiveNotes = baseFilteredNotes.filter((n) => n.isArchived).length;
+  const totalHomeNotes = baseFilteredNotes.filter((n) => !n.isArchived).length;
 
 
   const baseFilteredTodos = todoLists.filter((t) => {
@@ -167,12 +176,14 @@ function App() {
     setIsAdding(false);
     setIsEditing(false);
     setSelectedTodoId(null);
+    setMobilePanel('preview');
   }
 
   function handleAddClick() {
     setIsAdding(true);
     setIsEditing(false);
     setSelectedNote(null);
+    setMobilePanel('preview');
   }
 
   function handleChangeSearch(e) {
@@ -238,7 +249,8 @@ function App() {
 
   function handleCategoryChange(category) {
     setActiveCategory(category);
-
+    setSidebarOpen(false);
+    setMobilePanel('home');
   }
 
   function handleArchiveNote() {
@@ -277,7 +289,7 @@ function App() {
     setActiveCategory('all')
   }
   function handleToggleTheme() {
-    setActiveTheme(prev => prev === "light" ? "dark" : "light")
+    setActiveTheme(prev => prev === "light" ? "dark" : "light");
   }
 
   function handleSelectedTodo(id) {
@@ -286,6 +298,7 @@ function App() {
     setIsAdding(false);
     setIsEditing(false);
     setSelectedNote(null);
+    setMobilePanel('preview');
   }
 
   function handleCheckToogle(id) {
@@ -300,48 +313,64 @@ function App() {
     })
   }
 
+  function handleMobileView() {
+    setMobilePanel('home');
+  }
+
+  function handleMobileSidebar() {
+    setSidebarOpen(true);
+  }
+  function handleSidebarClose() {
+    setSidebarOpen(false);
+    setMobilePanel('home');
+  }
+
   return (
-    <div id="App" className={activeTheme === 'dark' ? 'dark' : ""}>
+    <div id='AppWrapper' className={activeTheme === 'dark' ? 'dark' : ""}>
 
-      
-      <Sidebar onSearch={handleChangeSearch} input={searchQuery} onCategory={handleCategoryChange} counts={countsToShow} total={totalCount} activeCategory={activeCategory} onToggle={handleToggleTheme} />
-
-
+      <div id='App'>
+        <Sidebar className={`sidebar ${sidebarOpen ? "show-mobile" : ""}`} onSearch={handleChangeSearch} input={searchQuery} onCategory={handleCategoryChange} counts={countsToShow} total={totalCount} activeCategory={activeCategory} onToggle={handleToggleTheme} onNav={handleSidebarClose} />
 
 
-      <div className="main">
-        <div className="main-header">
-          <h2 className="main-heading">
-            {location.pathname === "/" ? "My Notes" : location.pathname === "/archive" ? (location.pathname === "/archivetodo"
-              ? "Archived Todos"
-              : "Todo Lists") : "Todo List"}
-          </h2>
-          <button onClick={handleAddClick} className='add-note-btn'><AddIcon className="icon" /> {(location.pathname === '/todo'||location.pathname==='/archivetodo' )? "Add Todo" : "Add New Note"}</button>
-          {selectedTag !== 'all' && <div className='tag-filter-msg'>
-            <p>Filtered By Tag "{selectedTag}"</p><button onClick={handleClearTags}>clear</button>
-          </div>}
+
+
+        <div className={`main ${mobilePanel === 'preview' ? "hide-mobile" : ""}`}>
+          <div className="main-header">
+            <div className='header-flex'>
+              <button className={`hamburger-btn ${mobilePanel === "home" ? "show" : ""}`} onClick={handleMobileSidebar}>☰</button>
+              {sidebarOpen && (<div className="sidebar-overlay" onClick={() => setSidebarOpen(false)}></div>)}
+              <h2 className="main-heading">
+                {title}
+              </h2>
+            </div>
+            <button onClick={handleAddClick} className='add-note-btn'><AddIcon className="icon" /> {(location.pathname === '/todo' || location.pathname === '/archivetodo') ? "Add Todo" : "Add New Note"}</button>
+            <input type="text" className="mobile-search" placeholder="search notes/todos..." onChange={handleChangeSearch} value={searchQuery} />
+            {selectedTag !== 'all' && <div className='tag-filter-msg'>
+              <p>Filtered By Tag "{selectedTag}"</p><button onClick={handleClearTags}>clear</button>
+            </div>}
+          </div>
+          <Routes>
+            <Route path="/" element={<Homepage notes={homeNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag} selectedNote={selectedNote} />} />
+            <Route path="/archive" element={<Archivepage notes={archivedNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag} selectedNote={selectedNote} />} />
+            <Route path="/archivetodo" element={<Archivetodo todos={archivedTodos} onSelectTodo={handleSelectedTodo} onTagClick={handleSelectedTag} selectedTodo={selectedTodo} />} />
+            <Route path="/todo" element={<Todo todoList={homeTodos} onSelect={handleSelectedTodo} onTagClick={handleSelectedTag} selectedTodo={selectedTodo} />} />
+          </Routes>
         </div>
-        <Routes>
-          <Route path="/" element={<Homepage notes={homeNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag} selectedNote={selectedNote} />} />
-          <Route path="/archive" element={<Archivepage notes={archivedNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag} selectedNote={selectedNote} />} />
-          <Route path="/archivetodo" element={<Archivetodo todos={archivedTodos} onSelectTodo={handleSelectedTodo} onTagClick={handleSelectedTag} selectedTodo={selectedTodo} />} />
-          <Route path="/todo" element={<Todo todoList={homeTodos} onSelect={handleSelectedTodo} onTagClick={handleSelectedTag} selectedTodo={selectedTodo}/>} />
-        </Routes>
-      </div>
 
 
 
-      <div className='right'>
-        {isAdding && (location.pathname === "/" || location.pathname === "/archive") && <Noteform onAddNote={handleAddingNote} />}
-        {isEditing && (location.pathname === "/" || location.pathname === "/archive") && <Noteform onUpdateNote={handleUpdatedNote} noteToEdit={selectedNote} onCancel={handleCancelEdit} />}
-        {!selectedNote && !isAdding && !selectedTodo && <div className='preview-emptystate'>
-          <h2>Select A Note</h2>
-          <p>Choose a note from the list to preview,edit,archive,delete its content.</p>
-        </div>}
-        {!isEditing && selectedNote && <Preview noteSelected={selectedNote} onDelete={handleDeletingNote} onEdit={handleEditing} onArchive={handleArchiveNote} onTagClick={handleSelectedTag} />}
-        {isAdding && location.pathname === "/todo" && <Todoform onAddTodo={handleAddingTodo} />}
-        {isEditing && location.pathname === "/todo" && <Todoform todoToEdit={selectedTodo} onCancel={handleCancelEdit} onUpdateTodo={handleUpdatedTodo} />}
-        {!isEditing && selectedTodo && !isAdding && <Previewtodo selectedTodo={selectedTodo} onChecked={handleCheckToogle} onDelete={handleDeletingTodo} onEdit={handleEditing} onArchive={handleArchiveTodo} onTagClick={handleSelectedTag}/>}
+        <div className={`preview-panel ${mobilePanel === 'preview' ? "show-mobile" : ""}`}>
+          {isAdding && (location.pathname === "/" || location.pathname === "/archive") && <Noteform onBack={handleMobileView} onAddNote={handleAddingNote} />}
+          {isEditing && (location.pathname === "/" || location.pathname === "/archive") && <Noteform onBack={handleMobileView} onUpdateNote={handleUpdatedNote} noteToEdit={selectedNote} onCancel={handleCancelEdit} />}
+          {!selectedNote && !isAdding && !selectedTodo && <div className='preview-emptystate'>
+            <h2>Select A Note</h2>
+            <p>Choose a note from the list to preview,edit,archive,delete its content.</p>
+          </div>}
+          {!isEditing && selectedNote && <Preview onBack={handleMobileView} noteSelected={selectedNote} onDelete={handleDeletingNote} onEdit={handleEditing} onArchive={handleArchiveNote} onTagClick={handleSelectedTag} />}
+          {isAdding && location.pathname === "/todo" && <Todoform onBack={handleMobileView} onAddTodo={handleAddingTodo} />}
+          {isEditing && location.pathname === "/todo" && <Todoform onBack={handleMobileView} todoToEdit={selectedTodo} onCancel={handleCancelEdit} onUpdateTodo={handleUpdatedTodo} />}
+          {!isEditing && selectedTodo && !isAdding && <Previewtodo onBack={handleMobileView} selectedTodo={selectedTodo} onChecked={handleCheckToogle} onDelete={handleDeletingTodo} onEdit={handleEditing} onArchive={handleArchiveTodo} onTagClick={handleSelectedTag} />}
+        </div>
       </div>
     </div>
 

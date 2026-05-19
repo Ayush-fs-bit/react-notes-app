@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {ReactComponent as DeleteIcon} from './svg/deletetodo.svg';
 
-const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo}) => {
+const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo,onBack}) => {
   const [category, setCategory] = useState('other');
   const [title, setTitle] = useState('');
   const [tagsInput, setTagsInput] = useState('');
@@ -58,6 +58,7 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo}) => {
 
     setCategory('other');
     onCancel && onCancel();
+    onBack();
   }
 
   function handleTagAddition() {

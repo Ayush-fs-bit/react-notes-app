@@ -10,7 +10,7 @@ import {ReactComponent as TodoIcon} from "./svg/todolist.svg"
 import {ReactComponent as ArchiveIcon} from "./svg/archive.svg"
 import {ReactComponent as SettingIcon} from "./svg/setting.svg"
 
-const Sidebar = ({onSearch,input,onCategory,counts,total,activeCategory,onToggle}) => {
+const Sidebar = ({onSearch,input,onCategory,counts,total,activeCategory,onToggle,className,onNav}) => {
 
   const location=useLocation();
   function handleCategory(category){
@@ -21,10 +21,10 @@ const Sidebar = ({onSearch,input,onCategory,counts,total,activeCategory,onToggle
 
   
 
-  return ( <div className="sidebar">
+  return ( <div className={className}>
     <div className="top">
       <div className="logo">LOGO</div>
-      <input type="text" placeholder="search notes..." onChange={onSearch} value={input} />
+      <input type="text" className="sidebar-search" placeholder="search notes/todos..." onChange={onSearch} value={input} />
       <div className="sidebar-categories">
         <p>Categories</p>
         <button className={activeCategory==="all"?"selected":""} onClick={()=>handleCategory('all')}><AllIcon className="icon" />All <span>{total||0}</span></button>
@@ -34,10 +34,10 @@ const Sidebar = ({onSearch,input,onCategory,counts,total,activeCategory,onToggle
         <button className={activeCategory==="idea"?"selected":""} onClick={()=>handleCategory('idea')}><IdeaIcon className="icon" />Idea <span>{counts.idea||0}</span></button>
         <button className={activeCategory==="other"?"selected":""} onClick={()=>handleCategory('other')}><OtherIcon className="icon" />Other <span>{counts.other||0}</span></button>
       </div>
-      <Link className={`nav-link ${location.pathname==="/"?'selected':""}`} to="/"><NoteIcon className="icon" /> Notes</Link>
-      <Link className={`nav-link ${location.pathname==="/todo"?'selected':""}`} to="/todo" ><TodoIcon className="icon" /> To-do</Link>
-      <Link className={`nav-link ${location.pathname==="/archive"?'selected':""}`} to="/archive" ><ArchiveIcon className="icon" /> Archive Notes</Link>
-      <Link className={`nav-link ${location.pathname==="/archivetodo"?'selected':""}`} to="/archivetodo" ><ArchiveIcon className="icon" /> Archive Todos</Link>
+      <Link onClick={onNav} className={`nav-link ${location.pathname==="/"?'selected':""}`} to="/"><NoteIcon className="icon" /> Notes</Link>
+      <Link onClick={onNav} className={`nav-link ${location.pathname==="/todo"?'selected':""}`} to="/todo" ><TodoIcon className="icon" /> To-do</Link>
+      <Link onClick={onNav} className={`nav-link ${location.pathname==="/archive"?'selected':""}`} to="/archive" ><ArchiveIcon className="icon" /> Archive Notes</Link>
+      <Link onClick={onNav} className={`nav-link ${location.pathname==="/archivetodo"?'selected':""}`} to="/archivetodo" ><ArchiveIcon className="icon" /> Archive Todos</Link>
 
     </div>
     <div className="bottom">

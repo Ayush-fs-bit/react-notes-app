@@ -3,7 +3,7 @@ import {ReactComponent as DeleteIcon} from './svg/delete.svg';
 import {ReactComponent as EditIcon} from './svg/edit.svg';
 import {ReactComponent as UnarchiveIcon} from './svg/unarchive.svg';
 
-const Preview = ({ noteSelected, onDelete, onEdit, onArchive, onTagClick }) => {
+const Preview = ({ noteSelected, onDelete, onEdit, onArchive, onTagClick,onBack}) => {
   if (!noteSelected) {
     return <div className="preview">Select A Note</div>
   }
@@ -25,6 +25,7 @@ const Preview = ({ noteSelected, onDelete, onEdit, onArchive, onTagClick }) => {
 
   return (
     <div className="preview">
+      <button className="desktop-hidden back-btn" onClick={onBack}>Back</button>
       <div className="preview-header">
         <h1 className="preview-title">{noteSelected.title}</h1>
         <div className="preview-btns">

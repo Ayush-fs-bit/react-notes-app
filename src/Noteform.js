@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const Noteform = ({ onAddNote, noteToEdit, onUpdateNote, onCancel }) => {
+const Noteform = ({ onAddNote, noteToEdit, onUpdateNote, onCancel,onBack }) => {
   const [category, setCategory] = useState('other');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -52,7 +52,9 @@ const Noteform = ({ onAddNote, noteToEdit, onUpdateNote, onCancel }) => {
     setTitle('');
     setContent('');
     setCategory('other');
+    setTags([])
     onCancel && onCancel();
+    onBack();
   }
 
   function handleTagAddition() {
@@ -99,7 +101,8 @@ const Noteform = ({ onAddNote, noteToEdit, onUpdateNote, onCancel }) => {
             <div className="form-tags-container">
               <label htmlFor="tagInput">Tags</label>
               <input type="text" placeholder="Add tag..." id="tagInput" value={tagsInput} onChange={(e) => setTagsInput(e.target.value.trim())} />
-              <button type="button" onClick={handleTagAddition}>Add</button></div>
+              <button type="button" onClick={handleTagAddition}>Add</button>
+              </div>
             <div className="added-tags">
               {tags.map((t) => {
                 return <span className="form-tags" key={t}>{t}</span>
