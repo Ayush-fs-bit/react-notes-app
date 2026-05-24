@@ -24,10 +24,18 @@ const Previewtodo = ({selectedTodo,onChecked,onEdit,onDelete,onArchive,onTagClic
   const archive=<div className='previewbtn-flex'><ArchiveIcon className='icon'/><p>Archive</p></div>;
 
   return ( <div className="preview">
-    <button className="desktop-hidden back-btn" onClick={onBack}>Back</button>
+    <div className='mobile-preview-header'>
+        <button className="desktop-hidden back-btn" onClick={onBack}>Back</button>
+        <div className="preview-btns">
+          <button onClick={onEdit}><div className='previewbtn-flex'><EditIcon className="icon" /><p>Edit</p></div></button>
+          <button onClick={onArchive}>
+            {selectedTodo.isArchived === true ?unarchive:archive}
+          </button>
+          <button onClick={onDelete}><div className='previewbtn-flex'><DeleteIcon className="icon" /><p>Delete</p></div></button></div>
+    </div>
     <div className="preview-header">
         <h1 className="preview-title">{selectedTodo.title}</h1>
-        <div className="preview-btns">
+        <div className="preview-btns hide-mobile">
           <button onClick={onEdit}><div className='previewbtn-flex'><EditIcon className="icon" /><p>Edit</p></div></button>
           <button onClick={onArchive}>
             {selectedTodo.isArchived === true ?unarchive:archive}

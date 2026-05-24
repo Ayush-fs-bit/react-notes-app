@@ -55,8 +55,9 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo,onBack}) => {
 
   function handleCancel() {
     setTitle('');
-
     setCategory('other');
+    setTodos([]);
+    setTags([]);
     onCancel && onCancel();
     onBack();
   }

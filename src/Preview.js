@@ -1,9 +1,9 @@
 import { ReactComponent as ArchiveIcon } from './svg/archive.svg';
-import {ReactComponent as DeleteIcon} from './svg/delete.svg';
-import {ReactComponent as EditIcon} from './svg/edit.svg';
-import {ReactComponent as UnarchiveIcon} from './svg/unarchive.svg';
+import { ReactComponent as DeleteIcon } from './svg/delete.svg';
+import { ReactComponent as EditIcon } from './svg/edit.svg';
+import { ReactComponent as UnarchiveIcon } from './svg/unarchive.svg';
 
-const Preview = ({ noteSelected, onDelete, onEdit, onArchive, onTagClick,onBack}) => {
+const Preview = ({ noteSelected, onDelete, onEdit, onArchive, onTagClick, onBack }) => {
   if (!noteSelected) {
     return <div className="preview">Select A Note</div>
   }
@@ -19,21 +19,24 @@ const Preview = ({ noteSelected, onDelete, onEdit, onArchive, onTagClick,onBack}
     }}>{t}</div>))
   }
 
-  const unarchive=<div className='previewbtn-flex'><UnarchiveIcon className="icon" /><p>Unarchive</p></div>;
-  const archive=<div className='previewbtn-flex'><ArchiveIcon className='icon'/><p>Archive</p></div>;
+  const unarchive = <div className='previewbtn-flex'><UnarchiveIcon className="icon" /><p>Unarchive</p></div>;
+  const archive = <div className='previewbtn-flex'><ArchiveIcon className='icon' /><p>Archive</p></div>;
 
 
   return (
     <div className="preview">
-      <button className="desktop-hidden back-btn" onClick={onBack}>Back</button>
-      <div className="preview-header">
-        <h1 className="preview-title">{noteSelected.title}</h1>
+      <div className='mobile-preview-header'>
+        <button className="desktop-hidden back-btn" onClick={onBack}>Back</button>
         <div className="preview-btns">
           <button onClick={onEdit}><div className='previewbtn-flex'><EditIcon className="icon" /><p>Edit</p></div></button>
           <button onClick={onArchive}>
-            {noteSelected.isArchived === true ?unarchive:archive}
+            {noteSelected.isArchived === true ? unarchive : archive}
           </button>
-          <button onClick={onDelete}><div className='previewbtn-flex'><DeleteIcon className="icon" /><p>Delete</p></div></button></div>
+          <button onClick={onDelete}><div className='previewbtn-flex'><DeleteIcon className="icon" /><p>Delete</p></div></button>
+        </div>
+      </div>
+      <div className="preview-header">
+        <h1 className="preview-title">{noteSelected.title}</h1>
       </div>
 
       <div className="note-info">
@@ -46,7 +49,7 @@ const Preview = ({ noteSelected, onDelete, onEdit, onArchive, onTagClick,onBack}
           <p>{noteSelected.category}</p>
           <p>Date</p>
           <div className="preview-tags-container">
-                {renderTags(noteSelected.tags)}
+            {renderTags(noteSelected.tags)}
           </div>
         </div>
       </div>

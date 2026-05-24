@@ -211,6 +211,7 @@ function App() {
     const remainingNotes = notes.filter((n) => n.id !== selectedNote.id);
     setNotes(remainingNotes);
     setSelectedNote(null);
+    setMobilePanel('home');
   }
 
   function handleDeletingTodo() {
@@ -219,7 +220,7 @@ function App() {
     const remainingTodos = todoLists.filter((t) => t.id !== selectedTodoId);
     setTodoLists(remainingTodos);
     setSelectedTodoId(null);
-
+    setMobilePanel('home');
   }
 
   function handleEditing() {
@@ -262,6 +263,7 @@ function App() {
       ))
     )
     setSelectedNote(null);
+    setMobilePanel('home');
   }
 
   function handleArchiveTodo() {
@@ -273,6 +275,7 @@ function App() {
       ))
     )
     setSelectedTodoId(null);
+    setMobilePanel('home');
   }
 
 
