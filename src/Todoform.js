@@ -25,39 +25,45 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo,onBack}) => {
 
 
   function handleSubmit() {
+    if (!title.trim()) return;
     if (todoToEdit) {
-      if (!title.trim()) return;
       onUpdateTodo({
         id: todoToEdit.id,
         title,
-        todos:todos,
+        todos,
         category,
         isArchived: todoToEdit.isArchived,
-        tags: tags
+        tags,
+        createdAt:todoToEdit.createdAt,
+        updatedAt:Date.now()
       })
     } else {
-      if (!title.trim()) return;
       onAddTodo({
         id: Date.now(),
         title,
-        todos:todos,
+        todos,
         category,
         isArchived: false,
-        tags: tags
+        tags,
+        createdAt:Date.now(),
+        updatedAt:null
       })
-      setTitle('');
-      setTodos([]);
-      setTags([]);
-      setCategory('other');
+      resetForm();
     }
+  }
+
+  function resetForm(){
+    setTitle('');
+    setTodos([]);
+    setTags([]);
+    setCategory('other');
+    setTagsInput('');
+    setTodosInput('');
   }
 
 
   function handleCancel() {
-    setTitle('');
-    setCategory('other');
-    setTodos([]);
-    setTags([]);
+    resetForm();
     onCancel && onCancel();
     onBack();
   }
@@ -69,7 +75,7 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo,onBack}) => {
     setTagsInput('');
   }
 
-  function handleTodosAddition() {
+  function handleTodoAddition() {
     if (!todosInput) return;
 
     setTodos((prev) => [...prev, {
@@ -81,7 +87,7 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo,onBack}) => {
   }
 
   function handleDeleteTodo(id){
-    let remainingTodos=todos.filter((t)=>t.id !== id);
+    const remainingTodos=todos.filter((t)=>t.id !== id);
     setTodos(remainingTodos)
   }
 
@@ -102,7 +108,7 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo,onBack}) => {
               <label htmlFor="todoInput">Tasks</label>
               <div className="form-todo-input-task">
               <input type="text" placeholder="Add todos..." id="todoInput" value={todosInput} onChange={(e) => setTodosInput(e.target.value.trim())} />
-              <button type="button" onClick={handleTodosAddition}>Add</button></div>
+              <button type="button" onClick={handleTodoAddition}>Add</button></div>
         </div>
         <div className="added-todo">
               {todos?.map((t) => {

@@ -233,9 +233,8 @@
 
 #App {
   display: grid;
-  min-height: 100vh;
+  height: 100vh;
   grid-template-columns: 240px 1.1fr 1.2fr;
-  /*420*/
   background-color: var(--app-bc);
 }
 
@@ -244,6 +243,7 @@
 .main {
   padding: 20px 10px;
   border-right: 1px solid var(--mainRightBorder);
+  overflow: auto;
 }
 
 

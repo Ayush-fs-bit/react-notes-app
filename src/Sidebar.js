@@ -13,13 +13,22 @@ import { ReactComponent as SettingIcon } from "./svg/setting.svg"
 const Sidebar = ({ onSearch, input, onCategory, counts, total, activeCategory, onToggle, className, onNav }) => {
 
   const location = useLocation();
-  function handleCategory(category) {
-    onCategory(category);
-  }
 
+  const categories=[
+    {key:"all",label:"All",icon:AllIcon,counts:total||0},
+    {key:"work",label:"Work",icon:WorkIcon,counts:counts.work||0},
+    {key:"study",label:"Study",icon:StudyIcon,counts:counts.study||0},
+    {key:"personal",label:"Personal",icon:PersonalIcon,counts:counts.personal||0},
+    {key:"idea",label:"Idea",icon:IdeaIcon,counts:counts.idea||0},
+    {key:"other",label:"Other",icon:OtherIcon,counts:counts.other||0}
+  ];
 
-
-
+  const navLinks=[
+    {key:"notes",label:"Notes",icon:NoteIcon,path:"/"},
+    {key:"todolist",label:"Todo List",icon:TodoIcon,path:"/todo"},
+    {key:"archivenotes",label:"Archive Notes",icon:ArchiveIcon,path:"/archive"},
+    {key:"archivetodos",label:"Archive Todos",icon:ArchiveIcon,path:"/archivetodo"}
+  ];
 
   return (<div className={className}>
     <div className="top">
@@ -27,53 +36,16 @@ const Sidebar = ({ onSearch, input, onCategory, counts, total, activeCategory, o
       <input type="text" className="sidebar-search" placeholder="search notes/todos..." onChange={onSearch} value={input} />
       <div className="sidebar-categories">
         <p>Categories</p>
-        <button className={activeCategory === "all" ? "selected" : ""} onClick={() => handleCategory('all')}>
-          <div className="category-left">
-            <AllIcon className="icon" />
-            <span>All</span>
-          </div>
-          <span>{total || 0}</span>
-        </button>
-        <button className={activeCategory === "work" ? "selected" : ""} onClick={() => handleCategory('work')}>
-          <div className="category-left">
-            <WorkIcon className="icon" />
-            <span>Work</span>
-          </div>
-          <span>{counts.work || 0}</span>
-        </button>
-        <button className={activeCategory === "study" ? "selected" : ""} onClick={() => handleCategory('study')}>
-          <div className="category-left">
-            <StudyIcon className="icon" />
-            <span>Study</span>
-          </div> 
-          <span>{counts.study || 0}</span>
-        </button>
-        <button className={activeCategory === "personal" ? "selected" : ""} onClick={() => handleCategory('personal')}>
-          <div className="category-left">
-            <PersonalIcon className="icon" />
-            <span>Personal</span>
-          </div>
-          <span>{counts.personal || 0}</span>
-        </button>
-        <button className={activeCategory === "idea" ? "selected" : ""} onClick={() => handleCategory('idea')}>
-          <div className="category-left">
-            <IdeaIcon className="icon" />
-            <span>Idea</span>
-          </div>
-          <span>{counts.idea || 0}</span>
-        </button>
-        <button className={activeCategory === "other" ? "selected" : ""} onClick={() => handleCategory('other')}>
-          <div className="category-left">
-            <OtherIcon className="icon" />
-            <span>Other</span>
-          </div>
-           <span>{counts.other || 0}</span>
-        </button>
+        {categories.map((category)=>{
+          return <button key={category.key} className={activeCategory === category.key ? "selected" : ""} onClick={() => onCategory(category.key)}>
+             <div className="category-left"> <category.icon className="icon" /> <span>{category.label}</span> </div> 
+             <span>{category.counts}</span> 
+          </button>
+        })}
       </div>
-      <Link onClick={onNav} className={`nav-link ${location.pathname === "/" ? 'selected' : ""}`} to="/"><NoteIcon className="icon" /> Notes</Link>
-      <Link onClick={onNav} className={`nav-link ${location.pathname === "/todo" ? 'selected' : ""}`} to="/todo" ><TodoIcon className="icon" /> To-do</Link>
-      <Link onClick={onNav} className={`nav-link ${location.pathname === "/archive" ? 'selected' : ""}`} to="/archive" ><ArchiveIcon className="icon" /> Archive Notes</Link>
-      <Link onClick={onNav} className={`nav-link ${location.pathname === "/archivetodo" ? 'selected' : ""}`} to="/archivetodo" ><ArchiveIcon className="icon" /> Archive Todos</Link>
+      {navLinks.map((link)=> {
+        return <Link key={link.key} onClick={onNav} className={`nav-link ${location.pathname === link.path ? 'selected' : ""}`} to={link.path}><link.icon className="icon" />{link.label}</Link>
+      })}
 
     </div>
     <div className="bottom">

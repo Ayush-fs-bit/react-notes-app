@@ -21,38 +21,44 @@ const Noteform = ({ onAddNote, noteToEdit, onUpdateNote, onCancel,onBack }) => {
 
 
   function handleSubmit() {
+    if (!content.trim()) return;
     if (noteToEdit) {
-      if (!content.trim()) return;
       onUpdateNote({
         id: noteToEdit.id,
         title,
         content,
         category,
         isArchived: noteToEdit.isArchived,
-        tags: tags
+        tags,
+        createdAt:noteToEdit.createdAt,
+        updatedAt:Date.now()
       })
     } else {
-      if (!content.trim()) return;
       onAddNote({
         id: Date.now(),
         title,
         content,
         category,
         isArchived: false,
-        tags: tags
+        tags,
+        createdAt:Date.now(),
+        updatedAt:null
       })
-      setTitle('');
-      setContent('');
-      setCategory('other');
+      resetForm();
     }
+  }
+
+  function resetForm(){
+    setTitle('');
+    setContent('');
+    setCategory('other');
+    setTags([]);
+    setTagsInput('');
   }
 
 
   function handleCancel() {
-    setTitle('');
-    setContent('');
-    setCategory('other');
-    setTags([])
+    resetForm();
     onCancel && onCancel();
     onBack();
   }

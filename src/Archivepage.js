@@ -5,16 +5,12 @@ const Archivepage = ({notes,onSelectNote,onTagClick,selectedNote}) => {
       <p>Archived notes are stored here</p>
     </div>
   }
-  function handleTagClick(selectedTag){
-    onTagClick(selectedTag)
-  }
 
   function renderTags(tags){
     if(!tags||tags.length===0)return;
-    return tags.map((t)=>(<div className="tags" key={t} onClick={(e)=>{e.stopPropagation();
-      handleTagClick(t)}}>{t}</div>))
+    return tags.map((t) => (<div className="tags" key={t} onClick={(e)=>{e.stopPropagation();
+      onTagClick(t)}}>{t}</div>))
   }
-  console.log(selectedNote)
   
 
   return (<div className="archived-notes-container">

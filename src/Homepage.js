@@ -6,14 +6,11 @@ const Homepage = ({ notes,onSelectNote,onTagClick,selectedNote }) => {
     </div>
   }
 
-  function handleTagClick(selectedTag){
-    onTagClick(selectedTag)
-  }
 
   function renderTags(tags){
     if(!tags||tags.length===0)return;
     return tags.map((t)=>(<div className="tags" key={t} onClick={(e)=>{e.stopPropagation();
-      handleTagClick(t)}}>{t}</div>))
+      onTagClick(t)}}>{t}</div>))
   }
   
   return (<div className="notes-container">

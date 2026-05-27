@@ -10,10 +10,7 @@ import Todoform from './Todoform'
 import Archivetodo from './Archivetodo'
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { ReactComponent as AddIcon } from './svg/add.svg'
-
-
-
+import { ReactComponent as AddIcon } from './svg/add.svg';
 
 function App() {
 
@@ -72,6 +69,10 @@ function App() {
   const selectedTodo = todoLists.find((t) => t.id === selectedTodoId);
   const [mobilePanel, setMobilePanel] = useState("home");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const isNotesPage=location.pathname==="/";
+  const isNotesArchivePage=location.pathname==="/archive";
+  const isTodoPage=location.pathname==="/todo";
+  const isTodoArchivePage=location.pathname==='/archivetodo';
 
   const titles = {
     "/": "My Notes",
@@ -85,13 +86,13 @@ function App() {
   }, [activeTheme]);
 
   useEffect(() => {
-    if (location.pathname !== "/todo") {
+    if (!isTodoPage) {
       setSelectedTodoId(null);
     }
-    if (location.pathname === "/todo") {
+    if (isTodoPage) {
       setSelectedNote(null);
     }
-  }, [location.pathname]);
+  }, [isTodoPage]);
 
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
@@ -101,74 +102,39 @@ function App() {
     localStorage.setItem('todoLists', JSON.stringify(todoLists));
   }, [todoLists]);
 
-  const baseFilteredNotes = notes.filter((n) => {
-    const searchFilter = n.title.toLowerCase().includes(searchQuery.toLowerCase()) || n.content.toLowerCase().includes(searchQuery.toLowerCase());
-
-    const tagFilter = selectedTag === "all" || n.tags?.includes(selectedTag);
-
-    return searchFilter && tagFilter;
-  });
+  const baseFilteredNotes =filterBySearchAndTags(notes);
 
 
-  const filteredNotes = baseFilteredNotes.filter((n) => {
-    const categoryFilter = activeCategory === 'all' || n.category === activeCategory;
-    return categoryFilter;
-  })
+  const filteredNotes = filterByCategory(baseFilteredNotes);
 
   const homeNotes = filteredNotes.filter((n) => !n.isArchived);
   const archivedNotes = filteredNotes.filter((n) => n.isArchived);
 
-  const homeNotesCategoryCount = baseFilteredNotes.filter((n) => !n.isArchived).reduce((acc, note) => {
-    const cat = note.category || 'other';
-    acc[cat] = (acc[cat] || 0) + 1;
-    return acc;
-  }, {})
-
-  const archiveNotesCategoryCount = baseFilteredNotes.filter((n) => n.isArchived).reduce((acc, note) => {
-    const cat = note.category || 'other';
-    acc[cat] = (acc[cat] || 0) + 1;
-    return acc;
-  }, {})
+  const homeNotesCategoryCount = getCategoryCounts(baseFilteredNotes.filter((n) => !n.isArchived));
+  const archiveNotesCategoryCount =getCategoryCounts(baseFilteredNotes.filter((n) => n.isArchived));
 
 
   const totalArchiveNotes = baseFilteredNotes.filter((n) => n.isArchived).length;
   const totalHomeNotes = baseFilteredNotes.filter((n) => !n.isArchived).length;
 
 
-  const baseFilteredTodos = todoLists.filter((t) => {
-    const searchFilter = t.title.toLowerCase().includes(searchQuery.toLowerCase());
+  const baseFilteredTodos = filterBySearchAndTags(todoLists);
 
-    const tagFilter = selectedTag === "all" || t.tags?.includes(selectedTag);
-
-    return searchFilter && tagFilter;
-  });
-
-  const filteredTodos = baseFilteredTodos.filter((t) => {
-    const categoryFilter = activeCategory === 'all' || t.category === activeCategory;
-    return categoryFilter;
-  })
+  const filteredTodos = filterByCategory(baseFilteredTodos);
 
   const homeTodos = filteredTodos.filter((t) => !t.isArchived);
   const archivedTodos = filteredTodos.filter((t) => t.isArchived);
 
-  const homeTodosCategoryCount = baseFilteredTodos.filter((t) => !t.isArchived).reduce((acc, todo) => {
-    const cat = todo.category || 'other'
-    acc[cat] = (acc[cat] || 0) + 1;
-    return acc;
-  }, {})
+  const homeTodosCategoryCount =getCategoryCounts(baseFilteredTodos.filter((t) => !t.isArchived));
 
-  const archiveTodosCategoryCount = baseFilteredTodos.filter((t) => t.isArchived).reduce((acc, todo) => {
-    const cat = todo.category || 'other';
-    acc[cat] = (acc[cat] || 0) + 1;
-    return acc;
-  }, {})
+  const archiveTodosCategoryCount =getCategoryCounts(baseFilteredTodos.filter((t) => t.isArchived));
 
-  const countsToShow = location.pathname === "/archive" || location.pathname === "/" ? location.pathname === "/archive" ? archiveNotesCategoryCount : homeNotesCategoryCount : location.pathname === "/archivetodo" ? archiveTodosCategoryCount : homeTodosCategoryCount;
+  const countsToShow = isNotesArchivePage || isNotesPage ? isNotesArchivePage ? archiveNotesCategoryCount : homeNotesCategoryCount : isTodoArchivePage ? archiveTodosCategoryCount : homeTodosCategoryCount;
 
   const totalArchiveTodos = baseFilteredTodos.filter((t) => t.isArchived).length;
   const totalHomeTodos = baseFilteredTodos.filter((t) => !t.isArchived).length;
 
-  const totalCount = location.pathname === "/archive" || location.pathname === "/" ? location.pathname === "/archive" ? totalArchiveNotes : totalHomeNotes : location.pathname === "/archivetodo" ? totalArchiveTodos : totalHomeTodos;
+  const totalCount = isNotesArchivePage || isNotesPage ? isNotesArchivePage ? totalArchiveNotes : totalHomeNotes : isTodoArchivePage ? totalArchiveTodos : totalHomeTodos;
 
   function handleSelectNote(id) {
     let note = notes.find((n) => n.id === id);
@@ -304,7 +270,7 @@ function App() {
     setMobilePanel('preview');
   }
 
-  function handleCheckToogle(id) {
+  function handleCheckToggle(id) {
     setTodoLists((prev) => {
       return prev.map((list) => (
         {
@@ -328,6 +294,29 @@ function App() {
     setMobilePanel('home');
   }
 
+  function getCategoryCounts(items){
+    return items.reduce((acc, item) => {
+      const cat = item.category || 'other';
+      acc[cat] = (acc[cat] || 0) + 1;
+      return acc;
+    },{})
+  }
+
+  function filterBySearchAndTags(items){
+    return items.filter((item) => {
+      const searchFilter = item.title.toLowerCase().includes(searchQuery.toLowerCase())||item.content?.toLowerCase().includes(searchQuery.toLowerCase());;
+      const tagFilter = selectedTag === "all" || item.tags?.includes(selectedTag);
+      return searchFilter && tagFilter;
+    })
+  }
+
+  function filterByCategory(items){
+    return items.filter((item) => {
+        const categoryFilter = activeCategory === 'all' || item.category === activeCategory;
+        return categoryFilter;
+    })
+  }
+
   return (
     <div id='AppWrapper' className={activeTheme === 'dark' ? 'dark' : ""}>
 
@@ -346,7 +335,7 @@ function App() {
                 {title}
               </h2>
             </div>
-            <button onClick={handleAddClick} className='add-note-btn'><AddIcon className="icon" /> {(location.pathname === '/todo' || location.pathname === '/archivetodo') ? "Add Todo" : "Add New Note"}</button>
+            <button onClick={handleAddClick} className='add-note-btn'><AddIcon className="icon" /> {(isTodoPage||isTodoArchivePage) ? "Add Todo" : "Add New Note"}</button>
             <input type="text" className="mobile-search" placeholder="search notes/todos..." onChange={handleChangeSearch} value={searchQuery} />
             {selectedTag !== 'all' && <div className='tag-filter-msg'>
               <p>Filtered By Tag "{selectedTag}"</p><button onClick={handleClearTags}>clear</button>
@@ -363,16 +352,16 @@ function App() {
 
 
         <div className={`preview-panel ${mobilePanel === 'preview' ? "show-mobile" : ""}`}>
-          {isAdding && (location.pathname === "/" || location.pathname === "/archive") && <Noteform onBack={handleMobileView} onAddNote={handleAddingNote} />}
-          {isEditing && (location.pathname === "/" || location.pathname === "/archive") && <Noteform onBack={handleMobileView} onUpdateNote={handleUpdatedNote} noteToEdit={selectedNote} onCancel={handleCancelEdit} />}
+          {isAdding && (isNotesPage||isNotesArchivePage) && <Noteform onBack={handleMobileView} onAddNote={handleAddingNote} />}
+          {isEditing && (isNotesPage||isNotesArchivePage) && <Noteform onBack={handleMobileView} onUpdateNote={handleUpdatedNote} noteToEdit={selectedNote} onCancel={handleCancelEdit} />}
           {!selectedNote && !isAdding && !selectedTodo && <div className='preview-emptystate'>
             <h2>Select A Note</h2>
             <p>Choose a note from the list to preview,edit,archive,delete its content.</p>
           </div>}
           {!isEditing && selectedNote && <Preview onBack={handleMobileView} noteSelected={selectedNote} onDelete={handleDeletingNote} onEdit={handleEditing} onArchive={handleArchiveNote} onTagClick={handleSelectedTag} />}
-          {isAdding && location.pathname === "/todo" && <Todoform onBack={handleMobileView} onAddTodo={handleAddingTodo} />}
-          {isEditing && location.pathname === "/todo" && <Todoform onBack={handleMobileView} todoToEdit={selectedTodo} onCancel={handleCancelEdit} onUpdateTodo={handleUpdatedTodo} />}
-          {!isEditing && selectedTodo && !isAdding && <Previewtodo onBack={handleMobileView} selectedTodo={selectedTodo} onChecked={handleCheckToogle} onDelete={handleDeletingTodo} onEdit={handleEditing} onArchive={handleArchiveTodo} onTagClick={handleSelectedTag} />}
+          {isAdding && isTodoPage && <Todoform onBack={handleMobileView} onAddTodo={handleAddingTodo} />}
+          {isEditing && isTodoPage && <Todoform onBack={handleMobileView} todoToEdit={selectedTodo} onCancel={handleCancelEdit} onUpdateTodo={handleUpdatedTodo} />}
+          {!isEditing && selectedTodo && !isAdding && <Previewtodo onBack={handleMobileView} selectedTodo={selectedTodo} onChecked={handleCheckToggle} onDelete={handleDeletingTodo} onEdit={handleEditing} onArchive={handleArchiveTodo} onTagClick={handleSelectedTag} />}
         </div>
       </div>
     </div>

@@ -7,20 +7,18 @@ const Preview = ({ noteSelected, onDelete, onEdit, onArchive, onTagClick, onBack
   if (!noteSelected) {
     return <div className="preview">Select A Note</div>
   }
-  function handleTagClick(selectedTag) {
-    onTagClick(selectedTag)
-  }
+
 
   function renderTags(tags) {
     if (!tags || tags.length === 0) return;
     return tags.map((t) => (<div className="preview-tags" key={t} onClick={(e) => {
       e.stopPropagation();
-      handleTagClick(t)
+      onTagClick(t)
     }}>{t}</div>))
   }
 
-  const unarchive = <div className='previewbtn-flex'><UnarchiveIcon className="icon" /><p>Unarchive</p></div>;
-  const archive = <div className='previewbtn-flex'><ArchiveIcon className='icon' /><p>Archive</p></div>;
+  const unarchiveButton = <div className='previewbtn-flex'><UnarchiveIcon className="icon" /><p>Unarchive</p></div>;
+  const archiveButton = <div className='previewbtn-flex'><ArchiveIcon className='icon' /><p>Archive</p></div>;
 
 
   return (
@@ -30,7 +28,7 @@ const Preview = ({ noteSelected, onDelete, onEdit, onArchive, onTagClick, onBack
         <div className="preview-btns">
           <button onClick={onEdit}><div className='previewbtn-flex'><EditIcon className="icon" /><p>Edit</p></div></button>
           <button onClick={onArchive}>
-            {noteSelected.isArchived === true ? unarchive : archive}
+            {noteSelected.isArchived === true ? unarchiveButton : archiveButton}
           </button>
           <button onClick={onDelete}><div className='previewbtn-flex'><DeleteIcon className="icon" /><p>Delete</p></div></button>
         </div>
@@ -42,12 +40,16 @@ const Preview = ({ noteSelected, onDelete, onEdit, onArchive, onTagClick, onBack
       <div className="note-info">
         <div className="left">
           <p>Category</p>
-          <p>Last Modiefied</p>
+          <p>Created</p>
+          <p>Updated At</p>
           <p>Tags</p>
         </div>
         <div className="right">
           <p>{noteSelected.category}</p>
-          <p>Date</p>
+          <p>{new Date(noteSelected.createdAt).toLocaleDateString()}</p>
+          <p>
+            {noteSelected.updatedAt? new Date(noteSelected.updatedAt).toLocaleDateString(): "-"}
+          </p>
           <div className="preview-tags-container">
             {renderTags(noteSelected.tags)}
           </div>

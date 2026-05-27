@@ -1,18 +1,16 @@
-const Archivepage = ({todos,onSelectTodo,onTagClick,selectedTodo}) => {
+const Archivetodo = ({todos,onSelectTodo,onTagClick,selectedTodo}) => {
   if(todos.length===0){
     return <div className="empty-state">
       <h3>No Archived Todos Found</h3>
       <p>Archived Todos are stored here</p>
     </div>
   }
-  function handleTagClick(selectedTag){
-    onTagClick(selectedTag)
-  }
+  
 
   function renderTags(tags){
     if(!tags||tags.length===0)return;
     return tags.map((t)=>(<div className="tags" key={t} onClick={(e)=>{e.stopPropagation();
-      handleTagClick(t)}}>{t}</div>))
+      onTagClick(t)}}>{t}</div>))
   }
   
   
@@ -31,4 +29,4 @@ const Archivepage = ({todos,onSelectTodo,onTagClick,selectedTodo}) => {
   </div>  );
 }
  
-export default Archivepage;
+export default Archivetodo;
