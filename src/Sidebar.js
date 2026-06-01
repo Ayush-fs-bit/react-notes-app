@@ -4,13 +4,16 @@ import { ReactComponent as WorkIcon } from "./svg/work.svg";
 import { ReactComponent as StudyIcon } from "./svg/study.svg";
 import { ReactComponent as PersonalIcon } from "./svg/personal.svg";
 import { ReactComponent as IdeaIcon } from "./svg/idea.svg";
-import { ReactComponent as OtherIcon } from "./svg/other.svg"
-import { ReactComponent as NoteIcon } from "./svg/note.svg"
-import { ReactComponent as TodoIcon } from "./svg/todolist.svg"
-import { ReactComponent as ArchiveIcon } from "./svg/archive.svg"
-import { ReactComponent as SettingIcon } from "./svg/setting.svg"
+import { ReactComponent as OtherIcon } from "./svg/other.svg";
+import { ReactComponent as NoteIcon } from "./svg/note.svg";
+import { ReactComponent as TodoIcon } from "./svg/todolist.svg";
+import { ReactComponent as ArchiveIcon } from "./svg/archive.svg";
+import { ReactComponent as SettingIcon } from "./svg/setting.svg";
+import { ReactComponent as LightIcon} from "./svg/light.svg";
+import { ReactComponent as DarkIcon} from "./svg/dark.svg";
 
-const Sidebar = ({ onSearch, input, onCategory, counts, total, activeCategory, onToggle, className, onNav }) => {
+
+const Sidebar = ({ onSearch, input, onCategory, counts, total, activeCategory, onToggle, className, onNav,activeTheme }) => {
 
   const location = useLocation();
 
@@ -50,7 +53,7 @@ const Sidebar = ({ onSearch, input, onCategory, counts, total, activeCategory, o
     </div>
     <div className="bottom">
       <p><SettingIcon className="icon" />setting</p>
-      <p onClick={onToggle}>Toggle theme</p>
+      <p onClick={onToggle}>{activeTheme==="dark"?<LightIcon />:<DarkIcon />}{activeTheme==="dark"?"Light Theme":"Dark Theme"}</p>
     </div>
   </div>);
 }

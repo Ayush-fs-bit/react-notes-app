@@ -96,6 +96,14 @@
   --scrollbar: hsl(0, 0%, 20%);
 }
 
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
 
 .sidebar {
   height: 100vh;
@@ -174,6 +182,7 @@
   border-radius: 5px;
   cursor: pointer;
   font-weight: 600;
+  transition:transform 0.2 ease;
 }
 
 .sidebar-categories .selected {
@@ -193,6 +202,7 @@
   width: 100%;
   display: flex;
   align-items: center;
+  transition:transform 0.2 ease;
 }
 
 .nav-link.selected {
@@ -208,14 +218,12 @@
   border-radius: 5px;
   margin-bottom: 5px;
   font-weight: 600;
+  gap: 15px;
+  line-height: 1;
 }
 
-/* body {
-  overflow: hidden;
-} */
-.main {
-  overflow: auto;
-}
+
+
 
 .logo {
   padding-top: 0;
@@ -233,6 +241,7 @@
 
 #App {
   display: grid;
+  min-height: 0;
   height: 100vh;
   grid-template-columns: 240px 1.1fr 1.2fr;
   background-color: var(--app-bc);
@@ -244,6 +253,7 @@
   padding: 20px 10px;
   border-right: 1px solid var(--mainRightBorder);
   overflow: auto;
+  min-height: 0;
 }
 
 
@@ -263,7 +273,7 @@
   border: 1px solid var(--bottomBorder);
   overflow-wrap: anywhere;
   min-height: 135px;
-   transition: 0.2s ease;
+  transition:transform 0.2s ease;
 }
 
 .tags-container {
@@ -290,6 +300,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+  transition:transform 0.2 ease;
 }
 
 .add-note-btn img {
@@ -298,6 +309,8 @@
 
 .add-note-btn:hover {
   background-color: var(--addbtnHover-bc);
+  transform: scale(1.01);
+
 }
 
 .note-title {
@@ -375,7 +388,6 @@
 
 .empty-state {
   padding-top: 30vh;
-  width: 200px;
   margin: 0 auto;
   text-align: center;
   color: var(--addbtn);
@@ -599,6 +611,11 @@ form select {
   color: var(--cancelbtnHover);
 }
 
+.preview-panel {
+  overflow-y: auto;
+  min-height: 0;
+  
+}
 
 .preview {
   padding: 20px 30px;
@@ -647,6 +664,11 @@ form select {
   cursor: pointer;
   text-align: center;
   min-width: 40px;
+  transition:transform 0.5 ease;
+}
+
+.preview-tags:hover{
+  background-color: var(--addbtnHover-bc);
 }
 
 .preview-btns {
@@ -661,6 +683,7 @@ form select {
   background-color: var(--previewbtn-bc);
   color: var(--previewbtn);
   cursor: pointer;
+  transition:transform 0.5 ease;
 }
 
 .preview-btns button p {
@@ -670,12 +693,14 @@ form select {
 
 .preview-btns button:hover {
   background-color: var(--previewbtnHover-bc);
+  transform: scale(1.05);
 }
 
 .preview-content {
   margin-top: 20px;
   line-height: 1.6;
   color: var(--previewContent);
+  white-space: pre-wrap;
 }
 
 .preview-emptystate * {
@@ -722,6 +747,7 @@ form select {
   margin-bottom: 5px;
   border-radius: 5px;
   cursor: pointer;
+  transition:transform 0.2s ease;
 }
 
 .todo-card.selected {
@@ -878,7 +904,7 @@ form select {
   gap: 15px; 
 }
 
-.note-card:hover{
+.note-card:hover,.todo-card:hover{
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
@@ -886,6 +912,9 @@ form select {
   box-shadow: 0 4px 12px rgba(255,255,255,0.05);
 }
 
+.sidebar-categories button:hover,.nav-link:hover{
+  transform: scale(1.02);
+} 
 
 @media (max-width: 768px) {
   .preview{

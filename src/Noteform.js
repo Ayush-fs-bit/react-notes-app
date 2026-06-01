@@ -86,7 +86,7 @@ const Noteform = ({ onAddNote, noteToEdit, onUpdateNote, onCancel,onBack }) => {
 
 
         <label htmlFor="formContent">Content</label>
-        <textarea id="formContent" placeholder="start writing your notes..." value={content} onChange={(e) => setContent(e.target.value)}></textarea>
+        <textarea required id="formContent" placeholder="start writing your notes..." value={content} onChange={(e) => setContent(e.target.value)}></textarea>
 
 
 

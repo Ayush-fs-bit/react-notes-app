@@ -1,9 +1,17 @@
-const Archivetodo = ({todos,onSelectTodo,onTagClick,selectedTodo}) => {
-  if(todos.length===0){
-    return <div className="empty-state">
-      <h3>No Archived Todos Found</h3>
-      <p>Archived Todos are stored here</p>
-    </div>
+import EmptyState from "./EmptyState";
+
+const Archivetodo = ({todos,onSelectTodo,onTagClick,selectedTodo,activeCategory,searchQuery}) => {
+
+  if(todos.length===0 && searchQuery){
+    return <EmptyState title={"No TodoList Found"} message={`no todolist found including "${searchQuery}" in title`}/>
+  }
+
+  if(todos.length===0 && activeCategory==="all"){
+    return <EmptyState title={"No Archived TodoList Found"} message={"archive todolist are stored here"}/>
+  }
+
+  if(todos.length===0 && activeCategory !== "all"){
+    return <EmptyState title={"No Archived TodoList Found"} message={`no archive todolist found with category "${activeCategory}"`}/>
   }
   
 

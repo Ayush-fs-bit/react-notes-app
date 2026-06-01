@@ -102,7 +102,7 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo,onBack}) => {
         handleSubmit();
       }}>
         <label htmlFor="todoFormTitle">Title</label>
-        <input type="text" id="todoFormTitle" placeholder="Enter a Todo title..." value={title} onChange={(e) => setTitle(e.target.value)} />
+        <input required type="text" id="todoFormTitle" placeholder="Enter a Todo title..." value={title} onChange={(e) => setTitle(e.target.value)} />
 
         <div className="form-todos-container">
               <label htmlFor="todoInput">Tasks</label>

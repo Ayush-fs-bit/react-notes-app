@@ -1,10 +1,17 @@
-const Todo = ({todoList,onSelect,onTagClick,selectedTodo}) => {
+import EmptyState from "./EmptyState";
 
-  if(todoList.length===0){
-     return <div className="empty-state">
-      <h3>No TodoList found</h3>
-      <p>Start By Adding First TodoList</p>
-    </div>
+const Todo = ({todoList,onSelect,onTagClick,selectedTodo,activeCategory,searchQuery}) => {
+
+  if(todoList.length===0 && searchQuery){
+    return <EmptyState title={"No TodoList Found"} message={`no todolist found including "${searchQuery}" in title`}/>
+  }
+
+  if(todoList.length===0 && activeCategory==="all"){
+    return <EmptyState title={"No TodoList Found"} message={"start by adding a first todolist"}/>
+  }
+
+  if(todoList.length===0 && activeCategory !== "all"){
+    return <EmptyState title={"No TodoList Found"} message={`no todolist found with category "${activeCategory}"`}/>
   }
 
   function renderTags(tags){

@@ -11,6 +11,7 @@ import Archivetodo from './Archivetodo'
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ReactComponent as AddIcon } from './svg/add.svg';
+import EmptyState from './EmptyState';
 
 function App() {
 
@@ -22,37 +23,7 @@ function App() {
 
   const [todoLists, setTodoLists] = useState(() => {
     const saved = localStorage.getItem('todoLists');
-    return saved ? JSON.parse(saved) : [
-      {
-        id: 1,
-        title: "College Tasks",
-        todos: [
-          {
-            id: 101,
-            text: "Complete assignment",
-            completed: false
-          },
-          {
-            id: 102,
-            text: "Study DSA",
-            completed: true
-          }
-        ]
-      },
-
-      {
-        id: 2,
-        title: "Shopping",
-        todos: [
-          {
-            id: 201,
-            text: "Buy milk",
-            completed: false
-          }
-        ]
-      }
-    ]
-  });
+    return saved ? JSON.parse(saved) :[] });
 
   const [selectedNote, setSelectedNote] = useState(null);
   const [selectedTodoId, setSelectedTodoId] = useState(null);
@@ -321,7 +292,7 @@ function App() {
     <div id='AppWrapper' className={activeTheme === 'dark' ? 'dark' : ""}>
 
       <div id='App'>
-        <Sidebar className={`sidebar ${sidebarOpen ? "show-mobile" : ""}`} onSearch={handleChangeSearch} input={searchQuery} onCategory={handleCategoryChange} counts={countsToShow} total={totalCount} activeCategory={activeCategory} onToggle={handleToggleTheme} onNav={handleSidebarClose} />
+        <Sidebar className={`sidebar ${sidebarOpen ? "show-mobile" : ""}`} activeTheme={activeTheme} onSearch={handleChangeSearch} input={searchQuery} onCategory={handleCategoryChange} counts={countsToShow} total={totalCount} activeCategory={activeCategory} onToggle={handleToggleTheme} onNav={handleSidebarClose} />
 
 
 
@@ -342,10 +313,10 @@ function App() {
             </div>}
           </div>
           <Routes>
-            <Route path="/" element={<Homepage notes={homeNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag} selectedNote={selectedNote} />} />
-            <Route path="/archive" element={<Archivepage notes={archivedNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag} selectedNote={selectedNote} />} />
-            <Route path="/archivetodo" element={<Archivetodo todos={archivedTodos} onSelectTodo={handleSelectedTodo} onTagClick={handleSelectedTag} selectedTodo={selectedTodo} />} />
-            <Route path="/todo" element={<Todo todoList={homeTodos} onSelect={handleSelectedTodo} onTagClick={handleSelectedTag} selectedTodo={selectedTodo} />} />
+            <Route path="/" element={<Homepage notes={homeNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag} selectedNote={selectedNote} activeCategory={activeCategory} searchQuery={searchQuery}/>} />
+            <Route path="/archive" element={<Archivepage notes={archivedNotes} onSelectNote={handleSelectNote} onTagClick={handleSelectedTag} selectedNote={selectedNote} activeCategory={activeCategory} searchQuery={searchQuery}/>} />
+            <Route path="/archivetodo" element={<Archivetodo todos={archivedTodos} onSelectTodo={handleSelectedTodo} onTagClick={handleSelectedTag} selectedTodo={selectedTodo} activeCategory={activeCategory} searchQuery={searchQuery}/>} />
+            <Route path="/todo" element={<Todo todoList={homeTodos} onSelect={handleSelectedTodo} onTagClick={handleSelectedTag} selectedTodo={selectedTodo} activeCategory={activeCategory} searchQuery={searchQuery}/>} />
           </Routes>
         </div>
 
@@ -354,10 +325,7 @@ function App() {
         <div className={`preview-panel ${mobilePanel === 'preview' ? "show-mobile" : ""}`}>
           {isAdding && (isNotesPage||isNotesArchivePage) && <Noteform onBack={handleMobileView} onAddNote={handleAddingNote} />}
           {isEditing && (isNotesPage||isNotesArchivePage) && <Noteform onBack={handleMobileView} onUpdateNote={handleUpdatedNote} noteToEdit={selectedNote} onCancel={handleCancelEdit} />}
-          {!selectedNote && !isAdding && !selectedTodo && <div className='preview-emptystate'>
-            <h2>Select A Note</h2>
-            <p>Choose a note from the list to preview,edit,archive,delete its content.</p>
-          </div>}
+          {!selectedNote && !isAdding && !selectedTodo && <EmptyState title={"Select A Notes"} message={"Choose a note from the list to preview/edit/archive/delete."} />}
           {!isEditing && selectedNote && <Preview onBack={handleMobileView} noteSelected={selectedNote} onDelete={handleDeletingNote} onEdit={handleEditing} onArchive={handleArchiveNote} onTagClick={handleSelectedTag} />}
           {isAdding && isTodoPage && <Todoform onBack={handleMobileView} onAddTodo={handleAddingTodo} />}
           {isEditing && isTodoPage && <Todoform onBack={handleMobileView} todoToEdit={selectedTodo} onCancel={handleCancelEdit} onUpdateTodo={handleUpdatedTodo} />}

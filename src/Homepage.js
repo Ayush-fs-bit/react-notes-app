@@ -1,9 +1,17 @@
-const Homepage = ({ notes,onSelectNote,onTagClick,selectedNote }) => {
-  if(notes.length===0){
-    return <div className="empty-state">
-      <h3>No Notes found</h3>
-      <p>Start By Adding First Note</p>
-    </div>
+import EmptyState from "./EmptyState";
+
+const Homepage = ({ notes,onSelectNote,onTagClick,selectedNote,activeCategory,searchQuery}) => {
+
+  if(notes.length===0 && searchQuery){
+    return <EmptyState title={"No Notes Found"} message={`no notes found with "${searchQuery}" included`}/>
+  }
+
+  if(notes.length===0 && activeCategory==="all"){
+    return <EmptyState title={"No Notes Found"} message={"start by adding a first note"}/>
+  }
+
+  if(notes.length===0 && activeCategory !== "all"){
+    return <EmptyState title={"No Notes Found"} message={`no notes found with category "${activeCategory}"`}/>
   }
 
 

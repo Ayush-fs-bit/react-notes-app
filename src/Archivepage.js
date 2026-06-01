@@ -1,9 +1,17 @@
-const Archivepage = ({notes,onSelectNote,onTagClick,selectedNote}) => {
-  if(notes.length===0){
-    return <div className="empty-state">
-      <h3>No Archived Notes Found</h3>
-      <p>Archived notes are stored here</p>
-    </div>
+import EmptyState from "./EmptyState";
+
+const Archivepage = ({notes,onSelectNote,onTagClick,selectedNote,activeCategory,searchQuery}) => {
+
+  if(notes.length===0 && searchQuery){
+    return <EmptyState title={"No Notes Found"} message={`no notes found with "${searchQuery}" included`}/>
+  }
+
+  if(notes.length===0 && activeCategory==="all"){
+    return <EmptyState title={"No Archived Notes Found"} message={"archive notes are stored here"}/>
+  }
+
+  if(notes.length===0 && activeCategory !== "all"){
+    return <EmptyState title={"No Archived Notes Found"} message={`no archive notes found with category "${activeCategory}"`}/>
   }
 
   function renderTags(tags){
