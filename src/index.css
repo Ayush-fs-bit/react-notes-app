@@ -916,6 +916,69 @@ form select {
   transform: scale(1.02);
 } 
 
+.toast{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 400px;
+  background: var(--addbtn-bc);
+  border: 1px solid var(--bottomBorder);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,.15);
+  animation: toastSlideIn .25s ease;
+}
+
+.toast-content{
+  padding: 14px 16px;
+  color: var(--addbtn);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toast-content p{
+  margin: 0;
+}
+
+.toast-content button{
+  border: none;
+  color: var(--addbtn);
+  background: transparent;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.toast-progress{
+  height: 4px;
+  background: var(--addbtn);
+
+  animation: countdown 5s linear forwards;
+}
+
+
+@keyframes countdown{
+  from{
+    width: 100%;
+  }
+
+  to{
+    width: 0%;
+  }
+}
+
+@keyframes toastSlideIn{
+  from{
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 768px) {
   .preview{
     padding: 15px;
@@ -926,6 +989,10 @@ form select {
 
   .hamburger-btn.show {
     display: inline;
+  }
+
+  .toast{
+    width: 300px;
   }
 
   #App {

@@ -52,6 +52,12 @@ function App() {
   };
   const title = titles[location.pathname] || "Todo Lists";
 
+  const [deletedNote,setDeletedNote]=useState(null);
+  const [toastVisible,setToastVisible]=useState(false);
+  const [deleteTimer, setDeleteTimer] = useState(null);
+  const [deletedTodo,setDeletedTodo]=useState(null);
+
+
   useEffect(() => {
     localStorage.setItem('theme', JSON.stringify(activeTheme));
   }, [activeTheme]);
@@ -144,8 +150,24 @@ function App() {
 
   function handleDeletingNote() {
     if (!selectedNote) return;
-    if (!window.confirm("Delete This Note")) return;
+    const index=notes.findIndex((note)=>note.id===selectedNote.id);
+    const deletedNote=notes.find((note)=>note.id===selectedNote.id);
+    setDeletedNote({
+      note:deletedNote,
+      index:index
+    })
+    setToastVisible(true);
+    clearTimeout(deleteTimer);
+    const timer=setTimeout(() => {
+      setToastVisible(false);
+      setDeletedNote(null);
+    },5000);
+
+    setDeleteTimer(timer);
+
     const remainingNotes = notes.filter((n) => n.id !== selectedNote.id);
+
+
     setNotes(remainingNotes);
     setSelectedNote(null);
     setMobilePanel('home');
@@ -153,7 +175,22 @@ function App() {
 
   function handleDeletingTodo() {
     if (!selectedTodoId) return;
-    if (!window.confirm("Delete This Todo")) return;
+
+    const index=todoLists.findIndex((todo)=>todo.id===selectedTodo.id);
+    const deletedTodo=todoLists.find((todo)=>todo.id===selectedTodo.id);
+    setDeletedTodo({
+      todolist:deletedTodo,
+      index:index
+    })
+    setToastVisible(true);
+    clearTimeout(deleteTimer);
+    const timer=setTimeout(() => {
+      setToastVisible(false);
+      setDeletedTodo(null);
+    },5000);
+
+    setDeleteTimer(timer);
+    
     const remainingTodos = todoLists.filter((t) => t.id !== selectedTodoId);
     setTodoLists(remainingTodos);
     setSelectedTodoId(null);
@@ -288,6 +325,28 @@ function App() {
     })
   }
 
+  function handleUndo(){
+    if(isNotesPage||isNotesArchivePage){
+      const copy=[...notes];
+      copy.splice(deletedNote.index,0,deletedNote.note);
+      clearTimeout(deleteTimer);
+      setToastVisible(false);
+      setSelectedNote(deletedNote.note);
+      setDeletedNote(null);
+      setNotes(copy);
+      setMobilePanel("preview");
+    }else if(isTodoPage||isTodoArchivePage){
+      const copy=[...todoLists];
+      copy.splice(deletedTodo.index,0,deletedTodo.todolist);
+      clearTimeout(deleteTimer);
+      setToastVisible(false);
+      setSelectedTodoId(deletedTodo.todolist.id)
+      setDeletedTodo(null);
+      setTodoLists(copy);
+      setMobilePanel("preview");
+    }
+  }
+
   return (
     <div id='AppWrapper' className={activeTheme === 'dark' ? 'dark' : ""}>
 
@@ -332,6 +391,16 @@ function App() {
           {!isEditing && selectedTodo && !isAdding && <Previewtodo onBack={handleMobileView} selectedTodo={selectedTodo} onChecked={handleCheckToggle} onDelete={handleDeletingTodo} onEdit={handleEditing} onArchive={handleArchiveTodo} onTagClick={handleSelectedTag} />}
         </div>
       </div>
+      {toastVisible && (
+        <div className="toast">
+          <div className="toast-content">
+            <p>{isNotesPage||isNotesArchivePage?"Deleted Note":"Deleted Todo"}</p>
+            <button onClick={handleUndo}>Undo</button>
+          </div>
+          <div className="toast-progress"></div>
+      </div>
+        
+      )}
     </div>
 
   );
