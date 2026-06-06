@@ -2,23 +2,25 @@ import EmptyState from "./EmptyState";
 
 const Homepage = ({ notes,onSelectNote,onTagClick,selectedNote,activeCategory,searchQuery}) => {
 
-  if(notes.length===0 && searchQuery){
-    return <EmptyState title={"No Notes Found"} message={`no notes found with "${searchQuery}" included`}/>
-  }
-
-  if(notes.length===0 && activeCategory==="all"){
-    return <EmptyState title={"No Notes Found"} message={"start by adding a first note"}/>
-  }
-
-  if(notes.length===0 && activeCategory !== "all"){
-    return <EmptyState title={"No Notes Found"} message={`no notes found with category "${activeCategory}"`}/>
+  if (notes.length === 0) {
+    let message = "No notes found";
+    if (searchQuery && activeCategory !== "all") {
+      message = `No notes matching "${searchQuery}" in category "${activeCategory}"`;
+    } else if (searchQuery) {
+      message = `No notes matching "${searchQuery}"`;
+    } else if (activeCategory !== "all") {
+      message = `No notes in category "${activeCategory}"`;
+    } else {
+      message = "Start by adding your first note";
+    }
+    return <EmptyState title="No Notes Found" message={message} />;
   }
 
 
   function renderTags(tags){
     if(!tags||tags.length===0)return;
-    return tags.map((t)=>(<div className="tags" key={t} onClick={(e)=>{e.stopPropagation();
-      onTagClick(t)}}>{t}</div>))
+    return tags.map((t)=>(<div className="tags" key={t.id} onClick={(e)=>{e.stopPropagation();
+      onTagClick(t)}}>{t.title}</div>))
   }
   
   return (<div className="notes-container">

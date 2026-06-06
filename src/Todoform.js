@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import {ReactComponent as DeleteIcon} from './svg/deletetodo.svg';
+import { useLocation } from "react-router-dom";
 
-const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo,onBack}) => {
+const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo,onBack,isEditing}) => {
   const [category, setCategory] = useState('other');
   const [title, setTitle] = useState('');
   const [tagsInput, setTagsInput] = useState('');
   const [todosInput, setTodosInput] = useState('');
   const [tags, setTags] = useState([]);
   const [todos, setTodos] = useState([]);
+
+  const location = useLocation();
+  const isArchivePage=location.pathname==="/archivetodo";
 
 
 
@@ -43,7 +47,7 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo,onBack}) => {
         title,
         todos,
         category,
-        isArchived: false,
+        isArchived: isArchivePage,
         tags,
         createdAt:Date.now(),
         updatedAt:null
@@ -64,14 +68,16 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo,onBack}) => {
 
   function handleCancel() {
     resetForm();
-    onCancel && onCancel();
-    onBack();
+    onCancel?.();
+    if(!isEditing){
+      onBack();
+    }
   }
 
   function handleTagAddition() {
     if (!tagsInput) return;
     
-    setTags((prev) => [...prev, tagsInput]);
+    setTags((prev) =>prev.some((t)=>t.title===tagsInput)?prev:[...prev, { title: tagsInput, id: Date.now() }]);
     setTagsInput('');
   }
 
@@ -89,6 +95,12 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo,onBack}) => {
   function handleDeleteTodo(id){
     const remainingTodos=todos.filter((t)=>t.id !== id);
     setTodos(remainingTodos)
+  }
+
+  function deleteTag(id){
+    setTags((prev)=>{
+      return prev.filter((t)=>t.id !== id);
+    })
   }
 
   return (
@@ -135,8 +147,8 @@ const Todoform = ({todoToEdit,onCancel,onUpdateTodo,onAddTodo,onBack}) => {
               <input type="text" placeholder="Add tag..." id="tagInput" value={tagsInput} onChange={(e) => setTagsInput(e.target.value.trim())} />
               <button type="button" onClick={handleTagAddition}>Add</button></div>
             <div className="added-tags">
-              {tags?.map((t) => {
-                return <span className="form-tags" key={t}>{t}</span>
+              {tags.map((t) => {
+                return <div className="form-tags" key={t.id}><p>{t.title}</p><button type="button" className="form-tag-delete-btn"  onClick={()=>deleteTag(t.id)}>x</button></div>
               })}
             </div>
           </div>

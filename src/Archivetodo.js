@@ -17,8 +17,8 @@ const Archivetodo = ({todos,onSelectTodo,onTagClick,selectedTodo,activeCategory,
 
   function renderTags(tags){
     if(!tags||tags.length===0)return;
-    return tags.map((t)=>(<div className="tags" key={t} onClick={(e)=>{e.stopPropagation();
-      onTagClick(t)}}>{t}</div>))
+    return tags.map((t)=>(<div className="tags" key={t.id} onClick={(e)=>{e.stopPropagation();
+      onTagClick(t)}}>{t.title}</div>))
   }
   
   

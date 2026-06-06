@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
-const Noteform = ({ onAddNote, noteToEdit, onUpdateNote, onCancel,onBack }) => {
+const Noteform = ({ onAddNote, noteToEdit, onUpdateNote, onCancel,onBack,isEditing }) => {
   const [category, setCategory] = useState('other');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [tagsInput, setTagsInput] = useState('');
   const [tags, setTags] = useState([]);
+
+  const location = useLocation();
+  const isArchivePage=location.pathname==="/archive";
 
 
 
@@ -15,7 +19,7 @@ const Noteform = ({ onAddNote, noteToEdit, onUpdateNote, onCancel,onBack }) => {
       setTitle(noteToEdit.title);
       setContent(noteToEdit.content);
       setCategory(noteToEdit.category);
-      setTags(noteToEdit.tags)
+      setTags(noteToEdit.tags||[])
     }
   }, [noteToEdit]);
 
@@ -39,7 +43,7 @@ const Noteform = ({ onAddNote, noteToEdit, onUpdateNote, onCancel,onBack }) => {
         title,
         content,
         category,
-        isArchived: false,
+        isArchived: isArchivePage,
         tags,
         createdAt:Date.now(),
         updatedAt:null
@@ -59,15 +63,23 @@ const Noteform = ({ onAddNote, noteToEdit, onUpdateNote, onCancel,onBack }) => {
 
   function handleCancel() {
     resetForm();
-    onCancel && onCancel();
-    onBack();
+    onCancel?.();
+    if(!isEditing){
+      onBack();
+    }
   }
 
   function handleTagAddition() {
     if (!tagsInput) return;
 
-    setTags((prev) => [...prev, tagsInput]);
+    setTags((prev) =>prev.some((t)=>t.title===tagsInput)?prev:[...prev, { title: tagsInput, id: Date.now() }]);
     setTagsInput('');
+  }
+
+  function deleteTag(id){
+    setTags((prev)=>{
+      return prev.filter((t)=>t.id !== id);
+    })
   }
 
   return (
@@ -111,7 +123,7 @@ const Noteform = ({ onAddNote, noteToEdit, onUpdateNote, onCancel,onBack }) => {
               </div>
             <div className="added-tags">
               {tags.map((t) => {
-                return <span className="form-tags" key={t}>{t}</span>
+                return <div className="form-tags" key={t.id}><p>{t.title}</p><button type="button" className="form-tag-delete-btn"  onClick={()=>deleteTag(t.id)}>x</button></div>
               })}
             </div>
           </div>

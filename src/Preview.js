@@ -11,10 +11,10 @@ const Preview = ({ noteSelected, onDelete, onEdit, onArchive, onTagClick, onBack
 
   function renderTags(tags) {
     if (!tags || tags.length === 0) return;
-    return tags.map((t) => (<div className="preview-tags" key={t} onClick={(e) => {
+    return tags.map((t) => (<div className="preview-tags" key={t.id} onClick={(e) => {
       e.stopPropagation();
       onTagClick(t)
-    }}>{t}</div>))
+    }}>{t.title}</div>))
   }
 
   const unarchiveButton = <div className='previewbtn-flex'><UnarchiveIcon className="icon" /><p>Unarchive</p></div>;

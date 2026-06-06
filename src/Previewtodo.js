@@ -8,13 +8,12 @@ const Previewtodo = ({selectedTodo,onChecked,onEdit,onDelete,onArchive,onTagClic
     return <div className="preview">Select A Todo</div>
   }
 
-
   function renderTags(tags) {
     if (!tags || tags.length === 0) return;
-    return tags.map((t) => (<div className="preview-tags" key={t} onClick={(e) => {
+    return tags.map((t) => (<div className="preview-tags" key={t.id} onClick={(e) => {
       e.stopPropagation();
       onTagClick(t)
-    }}>{t}</div>))
+    }}>{t.title}</div>))
   }
   
   const unarchiveButton=<div className='previewbtn-flex'><UnarchiveIcon className="icon" /><p>Unarchive</p></div>;
@@ -29,6 +28,9 @@ const Previewtodo = ({selectedTodo,onChecked,onEdit,onDelete,onArchive,onTagClic
             {selectedTodo.isArchived === true ?unarchiveButton:archiveButton}
           </button>
           <button onClick={onDelete}><div className='previewbtn-flex'><DeleteIcon className="icon" /><p>Delete</p></div></button></div>
+    </div>
+    <div className="preview-header">
+        <h1 className="preview-title">{selectedTodo.title}</h1>
     </div>
 
        <div className="note-info">
@@ -58,7 +60,7 @@ const Previewtodo = ({selectedTodo,onChecked,onEdit,onDelete,onArchive,onTagClic
       {selectedTodo.todos.map((o)=>{
         return <div key={o.id} className='preview-todo' onClick={()=>onChecked(o.id)}>
           <input type="checkbox" readOnly id={o.id}  checked={o.completed}/>
-          <label htmlFor={o.id} onClick={()=>onChecked(o.id)}>{o.text}</label>
+          <label htmlFor={o.id}>{o.text}</label>
         </div>
       })}
     </div>

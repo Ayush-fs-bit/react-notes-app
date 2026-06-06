@@ -2,22 +2,24 @@ import EmptyState from "./EmptyState";
 
 const Todo = ({todoList,onSelect,onTagClick,selectedTodo,activeCategory,searchQuery}) => {
 
-  if(todoList.length===0 && searchQuery){
-    return <EmptyState title={"No TodoList Found"} message={`no todolist found including "${searchQuery}" in title`}/>
-  }
-
-  if(todoList.length===0 && activeCategory==="all"){
-    return <EmptyState title={"No TodoList Found"} message={"start by adding a first todolist"}/>
-  }
-
-  if(todoList.length===0 && activeCategory !== "all"){
-    return <EmptyState title={"No TodoList Found"} message={`no todolist found with category "${activeCategory}"`}/>
+  if (todoList.length === 0) {
+    let message = "No todolists found";
+    if (searchQuery && activeCategory !== "all") {
+      message = `No todolist matching "${searchQuery}" in category "${activeCategory}"`;
+    } else if (searchQuery) {
+      message = `No todolist matching "${searchQuery}"`;
+    } else if (activeCategory !== "all") {
+      message = `No todolist in category "${activeCategory}"`;
+    } else {
+      message = "Start by adding your first todolist";
+    }
+    return <EmptyState title="No TodoList Found" message={message} />;
   }
 
   function renderTags(tags){
     if(!tags||tags.length===0)return;
-    return tags.map((t)=>(<div className="tags" key={t} onClick={(e)=>{e.stopPropagation();
-      onTagClick(t)}}>{t}</div>))
+    return tags.map((t)=>(<div className="tags" key={t.id} onClick={(e)=>{e.stopPropagation();
+      onTagClick(t)}}>{t.title}</div>))
   }
   
   return (<div className="todo-container">

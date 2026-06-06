@@ -9,7 +9,7 @@ import Previewtodo from './Previewtodo';
 import Todoform from './Todoform'
 import Archivetodo from './Archivetodo'
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ReactComponent as AddIcon } from './svg/add.svg';
 import EmptyState from './EmptyState';
 
@@ -54,7 +54,7 @@ function App() {
 
   const [deletedNote,setDeletedNote]=useState(null);
   const [toastVisible,setToastVisible]=useState(false);
-  const [deleteTimer, setDeleteTimer] = useState(null);
+  const deleteTimer = useRef(null);
   const [deletedTodo,setDeletedTodo]=useState(null);
 
 
@@ -63,13 +63,14 @@ function App() {
   }, [activeTheme]);
 
   useEffect(() => {
+    const isTodoPage=location.pathname==="/todo";
     if (!isTodoPage) {
       setSelectedTodoId(null);
     }
     if (isTodoPage) {
       setSelectedNote(null);
     }
-  }, [isTodoPage]);
+  }, [location.pathname]);
 
   useEffect(() => {
     localStorage.setItem('notes', JSON.stringify(notes));
@@ -155,15 +156,15 @@ function App() {
     setDeletedNote({
       note:deletedNote,
       index:index
-    })
+    });
+    setDeletedTodo(null);
     setToastVisible(true);
-    clearTimeout(deleteTimer);
-    const timer=setTimeout(() => {
+    clearTimeout(deleteTimer.current);
+    deleteTimer.current=setTimeout(() => {
       setToastVisible(false);
       setDeletedNote(null);
     },5000);
 
-    setDeleteTimer(timer);
 
     const remainingNotes = notes.filter((n) => n.id !== selectedNote.id);
 
@@ -174,7 +175,7 @@ function App() {
   }
 
   function handleDeletingTodo() {
-    if (!selectedTodoId) return;
+    if (!selectedTodoId || !selectedTodo) return;
 
     const index=todoLists.findIndex((todo)=>todo.id===selectedTodo.id);
     const deletedTodo=todoLists.find((todo)=>todo.id===selectedTodo.id);
@@ -182,14 +183,13 @@ function App() {
       todolist:deletedTodo,
       index:index
     })
+    setDeletedNote(null);
     setToastVisible(true);
-    clearTimeout(deleteTimer);
-    const timer=setTimeout(() => {
+    clearTimeout(deleteTimer.current);
+    deleteTimer.current=setTimeout(() => {
       setToastVisible(false);
       setDeletedTodo(null);
     },5000);
-
-    setDeleteTimer(timer);
     
     const remainingTodos = todoLists.filter((t) => t.id !== selectedTodoId);
     setTodoLists(remainingTodos);
@@ -255,7 +255,7 @@ function App() {
 
 
   function handleSelectedTag(tag) {
-    setSelectedTag(tag);
+    setSelectedTag(tag.title);
     setSearchQuery('');
     setActiveCategory('all');
   }
@@ -280,18 +280,24 @@ function App() {
 
   function handleCheckToggle(id) {
     setTodoLists((prev) => {
-      return prev.map((list) => (
-        {
+      
+      return prev.map((list) => {
+        if (list.id !== selectedTodo.id) {
+          return list;
+        }
+        return{
           ...list, todos: list.todos.map((todo) => (
             todo.id === id ? { ...todo, completed: !todo.completed } : todo
           ))
         }
-      ))
+      })
     })
   }
 
   function handleMobileView() {
     setMobilePanel('home');
+    // setIsAdding(false);
+    // setIsEditing(false);
   }
 
   function handleMobileSidebar() {
@@ -313,10 +319,12 @@ function App() {
   function filterBySearchAndTags(items){
     return items.filter((item) => {
       const searchFilter = item.title.toLowerCase().includes(searchQuery.toLowerCase())||item.content?.toLowerCase().includes(searchQuery.toLowerCase());;
-      const tagFilter = selectedTag === "all" || item.tags?.includes(selectedTag);
+      const tagFilter = selectedTag === "all" || item.tags?.some((tag) => tag.title === selectedTag);;
       return searchFilter && tagFilter;
     })
   }
+
+
 
   function filterByCategory(items){
     return items.filter((item) => {
@@ -326,24 +334,26 @@ function App() {
   }
 
   function handleUndo(){
-    if(isNotesPage||isNotesArchivePage){
+    if(deletedNote){
       const copy=[...notes];
       copy.splice(deletedNote.index,0,deletedNote.note);
-      clearTimeout(deleteTimer);
+      clearTimeout(deleteTimer.current);
       setToastVisible(false);
       setSelectedNote(deletedNote.note);
       setDeletedNote(null);
       setNotes(copy);
       setMobilePanel("preview");
-    }else if(isTodoPage||isTodoArchivePage){
+      setSelectedTodoId(null);
+    }else if(deletedTodo){
       const copy=[...todoLists];
       copy.splice(deletedTodo.index,0,deletedTodo.todolist);
-      clearTimeout(deleteTimer);
+      clearTimeout(deleteTimer.current);
       setToastVisible(false);
       setSelectedTodoId(deletedTodo.todolist.id)
       setDeletedTodo(null);
       setTodoLists(copy);
       setMobilePanel("preview");
+      setSelectedNote(null);
     }
   }
 
@@ -366,7 +376,7 @@ function App() {
               </h2>
             </div>
             <button onClick={handleAddClick} className='add-note-btn'><AddIcon className="icon" /> {(isTodoPage||isTodoArchivePage) ? "Add Todo" : "Add New Note"}</button>
-            <input type="text" className="mobile-search" placeholder="search notes/todos..." onChange={handleChangeSearch} value={searchQuery} />
+            <input type="text" className="mobile-search" placeholder={(isNotesPage||isNotesArchivePage)?"search notes...":"search todolist..."} onChange={handleChangeSearch} value={searchQuery} />
             {selectedTag !== 'all' && <div className='tag-filter-msg'>
               <p>Filtered By Tag "{selectedTag}"</p><button onClick={handleClearTags}>clear</button>
             </div>}
@@ -383,16 +393,19 @@ function App() {
 
         <div className={`preview-panel ${mobilePanel === 'preview' ? "show-mobile" : ""}`}>
           {isAdding && (isNotesPage||isNotesArchivePage) && <Noteform onBack={handleMobileView} onAddNote={handleAddingNote} />}
-          {isEditing && (isNotesPage||isNotesArchivePage) && <Noteform onBack={handleMobileView} onUpdateNote={handleUpdatedNote} noteToEdit={selectedNote} onCancel={handleCancelEdit} />}
-          {!selectedNote && !isAdding && !selectedTodo && <EmptyState title={"Select A Notes"} message={"Choose a note from the list to preview/edit/archive/delete."} />}
+          {isEditing && (isNotesPage||isNotesArchivePage) && <Noteform onBack={handleMobileView} onUpdateNote={handleUpdatedNote} noteToEdit={selectedNote} onCancel={handleCancelEdit} isEditing={isEditing}/>}
+          {!selectedNote && !isAdding && !selectedTodo && <EmptyState title={(isNotesPage||isNotesArchivePage)?"Select A Note":"Select A Todo"} message={`Choose a ${(isNotesPage || isNotesArchivePage) ? "note" : "todo"} from the list to preview its details.`} />}
           {!isEditing && selectedNote && <Preview onBack={handleMobileView} noteSelected={selectedNote} onDelete={handleDeletingNote} onEdit={handleEditing} onArchive={handleArchiveNote} onTagClick={handleSelectedTag} />}
-          {isAdding && isTodoPage && <Todoform onBack={handleMobileView} onAddTodo={handleAddingTodo} />}
-          {isEditing && isTodoPage && <Todoform onBack={handleMobileView} todoToEdit={selectedTodo} onCancel={handleCancelEdit} onUpdateTodo={handleUpdatedTodo} />}
+          {isAdding && (isTodoPage||isTodoArchivePage) && <Todoform onBack={handleMobileView} onAddTodo={handleAddingTodo}/>}
+          {isEditing && (isTodoPage||isTodoArchivePage) && <Todoform onBack={handleMobileView} todoToEdit={selectedTodo} onCancel={handleCancelEdit} onUpdateTodo={handleUpdatedTodo} isEditing={isEditing}/>}
           {!isEditing && selectedTodo && !isAdding && <Previewtodo onBack={handleMobileView} selectedTodo={selectedTodo} onChecked={handleCheckToggle} onDelete={handleDeletingTodo} onEdit={handleEditing} onArchive={handleArchiveTodo} onTagClick={handleSelectedTag} />}
         </div>
       </div>
+
+
+
       {toastVisible && (
-        <div className="toast">
+        <div className="toast" key={deletedNote?.note?.id || deletedTodo?.todolist?.id}>
           <div className="toast-content">
             <p>{isNotesPage||isNotesArchivePage?"Deleted Note":"Deleted Todo"}</p>
             <button onClick={handleUndo}>Undo</button>

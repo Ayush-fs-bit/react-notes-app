@@ -16,6 +16,8 @@ import { ReactComponent as DarkIcon} from "./svg/dark.svg";
 const Sidebar = ({ onSearch, input, onCategory, counts, total, activeCategory, onToggle, className, onNav,activeTheme }) => {
 
   const location = useLocation();
+  const isNotesPage=location.pathname==="/";
+  const isNotesArchivePage=location.pathname==="/archive";
 
   const categories=[
     {key:"all",label:"All",icon:AllIcon,counts:total||0},
@@ -35,8 +37,8 @@ const Sidebar = ({ onSearch, input, onCategory, counts, total, activeCategory, o
 
   return (<div className={className}>
     <div className="top">
-      <div className="logo">LOGO</div>
-      <input type="text" className="sidebar-search" placeholder="search notes/todos..." onChange={onSearch} value={input} />
+      <div className="logo"><h2>NoteFlow</h2></div>
+      <input type="text" className="sidebar-search" placeholder={(isNotesPage||isNotesArchivePage)?"search notes...":"search todolist..."} onChange={onSearch} value={input} />
       <div className="sidebar-categories">
         <p>Categories</p>
         {categories.map((category)=>{

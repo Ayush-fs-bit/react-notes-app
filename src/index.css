@@ -17,8 +17,8 @@
   --noteContent: #bdbdbd;
   --noteTitleSelected: #131313;
   --noteContentSelected: #6b6b6b;
-  --noteTags-bc: #f7f7f7;
-  --noteTags: #cccccc;
+  --noteTags-bc: #eeeeee;
+  --noteTags: #9c9c9c;
   --noteTagsSelected-bc: #eeefef;
   --noteTagsSelected: #4F514F;
   --clearbtn-bc: #F3F4F6;
@@ -45,6 +45,7 @@
   --previewbtnHover-bc: #E5E7EB;
   --previewContent: #474747;
   --scrollbar: rgb(183, 181, 181);
+  --todoDelete-bc:rgb(213, 93, 93);
 }
 
 .dark {
@@ -66,9 +67,9 @@
   --noteContent: #595b5d;
   --noteTitleSelected: #f7f9fa;
   --noteContentSelected: #8a8d91;
-  --noteTags-bc: hsl(0, 0%, 8%);
+  --noteTags-bc: hsl(0, 0%, 12%);
   --noteTags: #595b5d;
-  --noteTagsSelected-bc: hsl(0, 0%, 13%);
+  --noteTagsSelected-bc: hsl(0, 0%, 19%);
   --noteTagsSelected: #8a8d91;
   --clearbtn-bc: #1c1b1d;
   --clearbtnHover-bc: #222124;
@@ -94,6 +95,7 @@
   --previewbtnHover-bc: #222124;
   --previewContent: #eae8e8;
   --scrollbar: hsl(0, 0%, 20%);
+  --todoDelete-bc:rgb(158, 54, 54);
 }
 
 html,
@@ -147,13 +149,14 @@ body,
 }
 
 .mobile-search {
+  font-size:16px;
   display: none;
   background-color: var(--addbtn-bc);
   color: var(--addbtn);
   font-weight: 600;
-  border: none;
+  border:1px solid var(--bottomBorder);
   width: 100%;
-  padding: 15px;
+  padding: 10px;
   border-radius: 5px;
   margin-bottom: 10px;
 }
@@ -182,7 +185,6 @@ body,
   border-radius: 5px;
   cursor: pointer;
   font-weight: 600;
-  transition:transform 0.2 ease;
 }
 
 .sidebar-categories .selected {
@@ -202,7 +204,6 @@ body,
   width: 100%;
   display: flex;
   align-items: center;
-  transition:transform 0.2 ease;
 }
 
 .nav-link.selected {
@@ -227,8 +228,8 @@ body,
 
 .logo {
   padding-top: 0;
-  padding-bottom: 20px;
-  color: var(--sidebarNavSelected);
+  padding-bottom: 10px;
+  color: var(--addbtn);
   font-weight: 600;
 }
 
@@ -242,7 +243,7 @@ body,
 #App {
   display: grid;
   min-height: 0;
-  height: 100vh;
+  height: 100dvh;
   grid-template-columns: 240px 1.1fr 1.2fr;
   background-color: var(--app-bc);
 }
@@ -272,7 +273,6 @@ body,
   cursor: pointer;
   border: 1px solid var(--bottomBorder);
   overflow-wrap: anywhere;
-  min-height: 135px;
   transition:transform 0.2s ease;
 }
 
@@ -300,11 +300,12 @@ body,
   cursor: pointer;
   display: flex;
   align-items: center;
-  transition:transform 0.2 ease;
+  transition:transform 0.2s ease;
+  border: 1px solid var(--bottomBorder);
 }
 
-.add-note-btn img {
-  margin-right: 5px;
+.add-note-btn .icon {
+  margin-right: 10px;
 }
 
 .add-note-btn:hover {
@@ -325,6 +326,7 @@ body,
   margin-bottom: 5px;
   font-size: 13px;
   line-height: 1.5;
+  font-weight: 600;
   display: -webkit-box;
   -webkit-line-clamp: 3;   
   -webkit-box-orient: vertical;
@@ -354,6 +356,7 @@ body,
   border-radius: 5px;
   cursor: pointer;
   font-weight: 600;
+  border: 1px solid var(--bottomBorder);
 }
 
 .tag-filter-msg {
@@ -418,6 +421,7 @@ form label,
   display: block;
   padding: 5px 0;
   color: var(--addbtn);
+  font-weight: 600;
 }
 
 #formTitle,
@@ -427,6 +431,7 @@ form label,
   padding: 5px 8px;
   margin-bottom: 10px;
   border-radius: 5px;
+  font-weight: 600;
 }
 
 .form-partesian {
@@ -456,6 +461,7 @@ form label,
   background: var(--formInput-bc);
   color: var(--addbtn);
   outline: none;
+  font-weight: 600;
 }
 
 .note-form input:focus,
@@ -482,6 +488,8 @@ form label,
   padding: 5px 8px;
   margin-bottom: 10px;
   border-radius: 5px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
   border: none;
   background-color: var(--tagsAddbtn-bc);
   color: var(--tagsAddbtn);
@@ -510,10 +518,12 @@ form label,
 }
 
 .form-todo button {
-  background-color: var(--cancelbtnHover-bc);
+  background-color: var(--todoDelete-bc);
   border: none;
   border-radius: 5px;
-  padding: 3px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
   cursor: pointer;
 }
 
@@ -563,15 +573,21 @@ form select {
   gap: 5px;
   margin-top: 5px;
   width: 100%;
+  max-height: 70px; 
 }
 
 .form-tags {
-  padding: 2px 10px;
+  max-height: 25px; 
+  display: flex;
+  gap: 2px;
   background-color: var(--formTags-bc);
   color: var(--addbtn);
   border-radius: 5px;
   min-width: 40px;
   text-align: center;
+}
+.form-tags p{
+  padding: 2px 10px;
 }
 
 .form-buttons,
@@ -664,7 +680,6 @@ form select {
   cursor: pointer;
   text-align: center;
   min-width: 40px;
-  transition:transform 0.5 ease;
 }
 
 .preview-tags:hover{
@@ -674,11 +689,12 @@ form select {
 .preview-btns {
   display: flex;
   gap: 5px;
+  
 }
 
 .preview-btns button {
   padding: 5px 10px;
-  border: none;
+  border: 1px solid var(--bottomBorder);
   border-radius: 6px;
   background-color: var(--previewbtn-bc);
   color: var(--previewbtn);
@@ -699,6 +715,7 @@ form select {
 .preview-content {
   margin-top: 20px;
   line-height: 1.6;
+  font-weight: 600;
   color: var(--previewContent);
   white-space: pre-wrap;
 }
@@ -746,6 +763,7 @@ form select {
   background-color: var(--noteCard-bc);
   margin-bottom: 5px;
   border-radius: 5px;
+  border: 1px solid var(--bottomBorder);
   cursor: pointer;
   transition:transform 0.2s ease;
 }
@@ -766,6 +784,8 @@ form select {
 
 .todo-completed {
   color: var(--noteContent);
+  font-size: 13px;
+  padding-bottom: 5px;
 }
 
 .todo-card.selected .todo-completed {
@@ -818,6 +838,8 @@ form select {
   color: var(--addbtn);
   font-weight: 600;
   cursor: pointer;
+  line-height: 1;
+  padding-bottom: 2px;
 }
 
 ::-webkit-scrollbar {
@@ -847,11 +869,9 @@ form select {
 }
 
 .hamburger-btn {
-  /* position: absolute;
-  top: 30px;
-  left: 10px; */
   display: none;
-  padding: 5px 10px;
+  font-size: 20px;
+  padding: 2px 10px;
   border: 1px solid var(--bottomBorder);
   background-color: var(--addbtn-bc);
   color: var(--addbtn);
@@ -869,7 +889,7 @@ form select {
 .header-flex {
   display: flex;
   align-items: center;
-  gap: 50px;
+  gap: 10px;
 }
 
 .back-btn {
@@ -956,6 +976,30 @@ form select {
   animation: countdown 5s linear forwards;
 }
 
+#todoInput{
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.form-tag-delete-btn{
+  padding: 2px 7px;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--todoDelete-bc);
+  color: var(--cancelbtnHover);
+  cursor: pointer;
+}
+
+.preview-todo input[type="checkbox"]{
+  accent-color: black;
+}
+.dark .preview-todo input[type="checkbox"]{
+  accent-color: rgb(86, 86, 84);
+} 
+
+#formCategories{
+  padding:5px 8px;
+}
 
 @keyframes countdown{
   from{
@@ -987,6 +1031,14 @@ form select {
     display: block;
   }
 
+  #formTitle,#todoFormTitle,.form-todo-input-task input,#tagInput,.form-tags-container button,.todo-form select,.note-form select,#formCategories{
+    padding:8px 5px;
+  }
+
+  .cancel-btn,.save-btn{
+    padding:8px 20px;
+  }
+
   .hamburger-btn.show {
     display: inline;
   }
@@ -997,6 +1049,7 @@ form select {
 
   #App {
     grid-template-columns: 1fr;
+    height: 100dvh;
   }
 
   .preview-btns.desktop-hidden{
@@ -1018,6 +1071,7 @@ form select {
 
   .sidebar {
     display: none;
+    height: 100dvh;
   }
 
   .sidebar.show-mobile {
@@ -1025,6 +1079,7 @@ form select {
     position: absolute;
     width: 60vw;
     z-index: 1000;
+    border-right: 1px solid var(--bottomBorder);
   }
 
   .preview-panel.show-mobile {
@@ -1058,9 +1113,18 @@ form select {
     color: var(--noteTitleSelected);
   }
 
+  .add-note-btn{
+    font-size: 18px;
+  }
+
   .note-content,
   .todo-completed {
     color: var(--noteContentSelected);
+  }
+
+  .note-card .tags,.todo-card .tags{
+    background-color: var(--noteTagsSelected-bc);
+    color: var(--noteTagsSelected);
   }
 
   .sidebar-search {
@@ -1077,6 +1141,15 @@ form select {
 
   .main-heading{
     margin-bottom: 0;
+    font-size: 30px;
+  }
+
+  .added-tags{
+    max-height: 80px;
+  }
+
+  .empty-state{
+    padding-top: 10vh;
   }
 }
 
